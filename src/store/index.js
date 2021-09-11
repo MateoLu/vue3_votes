@@ -11,7 +11,8 @@ const store = createStore({
     increment(state) {
       state.count++
     }
-  }
+  },
+  actions: {}
 })
 
 export default store
