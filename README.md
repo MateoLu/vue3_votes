@@ -1,37 +1,47 @@
 # zbc_votes
 
-#### 介绍
+## 介绍
+
 投票系统
 
-#### 软件架构
-软件架构说明
+## 项目目录
 
+- assets：静态资源目录
+- components：公共组件目录
+- pages：路由页面组件
+- request：请求后端接口函数
+- router：路由配置
+- store：全局状态管理
+- utils：工具类
+- App.vue：根组建
+- main.js：项目入口文件
 
-#### 安装教程
+## 开发模式启动项目
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```npm
+npm run dev  或者  yarn dev
+```
 
-#### 使用说明
+## git 流程
 
-1.  xxxx
-2.  xxxx
-3.  xxxxx
+1. git add .
+2. git commit -m "feat: xxxxx"
+3. git pull (此过程可能存在代码冲突)
+4. git push
 
-#### 参与贡献
+### git commit 提交规范
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+commit 的内容，只允许使用下面 7 个标识。
 
+- feat: 新功能
+- fix: 修补 bug
+- docs: 文档（documentation）
+- style: 样式/格式（不影响代码运行的变动）
+- refactor: 重构（即不是新增功能，也不是修改 bug 的代码变动）
+- test: 增加测试
+- chore: 构建过程或辅助工具的变动
 
-#### 特技
+## 注意事项
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- assets 中的 less 文件夹下的切记不要修改，只能在 variable.less 文件添加一些可复用的变量
+- 如果在合并代码时有冲突，在一定要在群里沟通一下
