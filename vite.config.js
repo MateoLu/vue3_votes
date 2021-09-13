@@ -39,6 +39,7 @@ export default defineConfig({
     }
   },
   server: {
+    port: 7777,
     cors: true,
     open: true,
     // 反向代理配置，注意rewrite写法，开始没看文档在这里踩了坑
