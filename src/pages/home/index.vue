@@ -3,43 +3,47 @@
     <TheHeader />
     <div class="home-wrapper">
       <el-container>
-        <el-container>
-          <el-aside width="200px">
-            <el-button type="primary" class="el-btn">创建问卷</el-button>
-            <!-- 边框 -->
-            <div class="el-border">
-              <p>您已创建{{ voteLength }}个问卷</p>
-            </div>
-          </el-aside>
-          <el-main>
-            <!-- 问卷列表+搜索框 -->
-            <div class="list-container">
-              <el-row :gutter="20">
-                <el-col :span="14">
-                  <div class="grid-content">问卷列表</div>
-                </el-col>
-                <el-col :span="10">
-                  <el-input
-                    placeholder="请输入内容"
-                    suffix-icon="el-icon-search"
-                    v-model="input2"
-                  ></el-input>
-                </el-col>
-              </el-row>
-            </div>
+        <el-aside width="200px">
+          <el-button
+            @click="goPage('/create-vote')"
+            type="primary"
+            class="el-btn"
+          >
+            创建问卷
+          </el-button>
+          <!-- 边框 -->
+          <div class="el-border">
+            <p>您已创建{{ voteLength }}个问卷</p>
+          </div>
+        </el-aside>
+        <el-main>
+          <!-- 问卷列表+搜索框 -->
+          <div class="list-container">
+            <el-row :gutter="20">
+              <el-col :span="14">
+                <div class="grid-content">问卷列表</div>
+              </el-col>
+              <el-col :span="10">
+                <el-input
+                  placeholder="请输入内容"
+                  suffix-icon="el-icon-search"
+                  v-model="input2"
+                ></el-input>
+              </el-col>
+            </el-row>
+          </div>
 
-            <div class="list-votes">
-              <VoteItem
-                v-for="item in votes"
-                :key="item.id"
-                :id="item.id"
-                :title="item.title"
-                :num="item.num"
-                :time="item.time"
-              />
-            </div>
-          </el-main>
-        </el-container>
+          <div class="list-votes">
+            <VoteItem
+              v-for="item in votes"
+              :key="item.id"
+              :id="item.id"
+              :title="item.title"
+              :num="item.num"
+              :time="item.time"
+            />
+          </div>
+        </el-main>
       </el-container>
     </div>
   </div>
@@ -48,6 +52,7 @@
 import { defineComponent, ref, onMounted, computed } from 'vue'
 import VoteItem from '@/components/VoteItem.vue'
 import TheHeader from '@/components/TheHeader.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -61,12 +66,19 @@ export default defineComponent({
       { id: 3, title: '你喜欢男的还是女的?', num: 2, time: '2018年10月2日' }
     ])
 
+    const router = useRouter()
+
     onMounted(() => {})
+
+    const goPage = (address) => {
+      router.push(address)
+    }
 
     return {
       votes,
       voteLength: computed(() => votes.value.length),
-      input2: ref('')
+      input2: ref(''),
+      goPage
     }
   }
 })

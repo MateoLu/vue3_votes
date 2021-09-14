@@ -2,7 +2,7 @@
   <el-header class="header">
     <div class="header-wrapper">
       <!-- 头像 -->
-      <div class="img">
+      <div class="img" @click="goHome">
         <img src="@/assets/images/zbc_logo.jpg" width="30" alt="" />
         &nbsp;甄布绰投票系统
 
@@ -35,7 +35,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'TheHeader',
+  methods: {
+    goHome() {
+      this.$router.push('/home')
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -51,6 +58,7 @@ export default {}
       line-height: 60px;
       display: flex;
       align-items: center;
+      cursor: pointer;
     }
   }
 }

@@ -4,6 +4,7 @@
 
 const home = () => import('@/pages/home/index.vue')
 const login = () => import('@/pages/login/index.vue')
+const createVote = () => import('@/pages/create-vote/index.vue')
 const Page404 = () => import('@/components/Page404.vue')
 
 const routes = [
@@ -12,6 +13,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: home
+  },
+  {
+    path: '/create-vote',
+    name: 'createVote',
+    component: createVote
   },
   {
     path: '/login',
