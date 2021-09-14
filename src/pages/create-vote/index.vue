@@ -1,24 +1,40 @@
 <template>
   <div class="home-container">
-    <TheHeader />
-    <div class="home-wrapper">
-      <el-container>创建问卷</el-container>
-    </div>
+    <vote-header />
   </div>
 </template>
 <script>
 import { defineComponent } from 'vue'
-import TheHeader from '@/components/TheHeader.vue'
+import VoteHeader from './components/vote-header.vue'
 
 export default defineComponent({
+  // components: {
+  //   TheHeader
+  // },
+  setup() {},
   components: {
-    TheHeader
-  },
-  setup() {}
+    VoteHeader
+  }
 })
 </script>
 
 <style scoped lang="less">
+.header {
+  background-color: #fff;
+  color: var(--el-text-color-primary);
+  line-height: 60px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  .header-wrapper {
+    width: 1048px;
+    margin: auto;
+    .img {
+      line-height: 60px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+}
 .home-container {
   width: 100vw;
   height: 100%;

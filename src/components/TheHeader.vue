@@ -2,7 +2,7 @@
   <el-header class="header">
     <div class="header-wrapper">
       <!-- 头像 -->
-      <div class="img" @click="goHome">
+      <div class="img" @click="goPage('/home')">
         <img src="@/assets/images/zbc_logo.jpg" width="30" alt="" />
         &nbsp;甄布绰投票系统
 
@@ -38,8 +38,8 @@
 export default {
   name: 'TheHeader',
   methods: {
-    goHome() {
-      this.$router.push('/home')
+    goPage(address) {
+      this.$router.push(address)
     }
   }
 }
