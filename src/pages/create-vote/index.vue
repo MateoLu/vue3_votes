@@ -1,40 +1,24 @@
 <template>
   <div class="home-container">
     <vote-header />
+    <VoteMain />
   </div>
 </template>
 <script>
 import { defineComponent } from 'vue'
 import VoteHeader from './components/vote-header.vue'
+import VoteMain from './components/vote-main.vue'
 
 export default defineComponent({
-  // components: {
-  //   TheHeader
-  // },
   setup() {},
   components: {
-    VoteHeader
+    VoteHeader,
+    VoteMain
   }
 })
 </script>
 
 <style scoped lang="less">
-.header {
-  background-color: #fff;
-  color: var(--el-text-color-primary);
-  line-height: 60px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  .header-wrapper {
-    width: 1048px;
-    margin: auto;
-    .img {
-      line-height: 60px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-  }
-}
 .home-container {
   width: 100vw;
   height: 100%;
