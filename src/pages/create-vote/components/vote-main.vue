@@ -32,7 +32,7 @@
           <!-- 发布并分享按钮 -->
           <el-button type="primary" class="share">发布并分享</el-button>
         </el-main>
-        <el-aside style="width: 394px">
+        <el-aside style="width: 450px">
           <div class="calendar">
             <!--日历图表-->
             <el-row :gutter="20" class="home_head">
@@ -78,14 +78,16 @@ export default defineComponent({
 <style scoped lang="less">
 .home-container {
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
   .home-wrapper {
+    width: 100%;
+    height: 100%;
     background-color: #f3f5f6;
     .el-aside {
       background-color: #f2f2f2;
       width: 257px;
-      height: 749.6px;
+      height: 100%;
       h3 {
         margin: 32px 0px 0px 27px;
       }
@@ -94,13 +96,15 @@ export default defineComponent({
         padding: 10px 33px 10px 33px;
       }
       .calendar {
-        width: 394px;
-        height: 430px;
+        width: 450px;
+        height: 100%;
+        overflow: hidden;
       }
     }
 
     .el-main {
       background-color: #f8f8f8;
+      height: calc(100vh - 50px);
       .vote-main {
         border: 1px solid #ccc;
         width: 800px;

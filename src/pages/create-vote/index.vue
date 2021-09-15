@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <vote-header />
+    <VoteHeader />
     <VoteMain />
   </div>
 </template>
