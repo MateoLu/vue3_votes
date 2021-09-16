@@ -3,6 +3,7 @@ import App from './App.vue'
 import store from '@/store'
 import router from '@/router'
 import '@/assets/less/index.less'
+import 'element-plus/dist/index.css'
 
 const app = createApp(App)
 

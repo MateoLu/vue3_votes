@@ -30,7 +30,9 @@
             </p>
           </div>
           <!-- 发布并分享按钮 -->
-          <el-button type="primary" class="share">发布并分享</el-button>
+          <el-button type="primary" @click="open" class="share">
+            发布并分享
+          </el-button>
         </el-main>
         <el-aside style="width: 450px">
           <div class="calendar">
@@ -55,6 +57,7 @@
 import { defineComponent, ref } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import { Edit } from '@element-plus/icons'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 export default defineComponent({
   name: 'Main',
@@ -65,11 +68,32 @@ export default defineComponent({
   },
   setup() {
     const value = ref(new Date())
+
+    const open = () => {
+      ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          ElMessage({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    }
     return {
       value,
       locale: zhCn,
       radio1: ref('男孩子'),
-      radio2: ref('女孩子')
+      radio2: ref('女孩子'),
+      open
     }
   }
 })
