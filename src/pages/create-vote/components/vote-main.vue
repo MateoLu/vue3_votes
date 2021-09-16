@@ -41,7 +41,7 @@
               <el-col>
                 <el-card>
                   <el-config-provider :locale="locale">
-                    <el-calendar v-model="nowDateValue"></el-calendar>
+                    <el-calendar v-model="value"></el-calendar>
                   </el-config-provider>
                 </el-card>
               </el-col>
