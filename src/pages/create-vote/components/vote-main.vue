@@ -10,24 +10,20 @@
         </el-aside>
         <el-main>
           <div class="vote-main">
-            <p>你们喜欢男孩子还是女孩子？</p>
+            <input v-model="voteForm.title" class="input-dynamic" />
             <div class="text">感谢你能抽出几分钟时间来参加答题，阿里嘎多！</div>
           </div>
           <div class="vote-main-bottom">
-            <p>男孩子or女孩子？</p>
-            <!-- 删除问卷 -->
-            <el-button
-              type="text"
-              icon="el-icon-delete-solid"
-              class="text-delete"
-            ></el-button>
-            <!-- 单选框 -->
-            <p>
-              <el-radio v-model="radio1" label="1">男孩子</el-radio>
-            </p>
-            <p>
-              <el-radio v-model="radio1" label="2">女孩子</el-radio>
-            </p>
+            <div class="bottom-left">
+              <div class="question-box">
+                <input v-model="voteForm.question" class="input-dynamic" />
+              </div>
+              <div class="question-choose">
+                <DynamicRadioEdit />
+                <DynamicRadioEdit />
+              </div>
+            </div>
+            <div class="bottom-right"></div>
           </div>
           <!-- 发布并分享按钮 -->
           <el-button type="primary" @click="open" class="share">
@@ -41,7 +37,7 @@
               <el-col>
                 <el-card>
                   <el-config-provider :locale="locale">
-                    <el-calendar v-model="value"></el-calendar>
+                    <el-calendar v-model="newDateValue"></el-calendar>
                   </el-config-provider>
                 </el-card>
               </el-col>
@@ -54,20 +50,29 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, reactive } from 'vue'
+import DynamicRadioEdit from './dynamic-radio-edit.vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-import { Edit } from '@element-plus/icons'
+import { Edit, Minus } from '@element-plus/icons'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 export default defineComponent({
   name: 'Main',
   components: {
     // 全名
-    [Edit.name]: Edit
-    // Delete
+    [Edit.name]: Edit,
+    [Minus.name]: Minus,
+    DynamicRadioEdit
   },
   setup() {
-    const value = ref(new Date())
+    const newDateValue = ref(new Date())
+
+    const voteForm = reactive({
+      title: '',
+      question: ''
+    })
+
+    const minusRef = ref(undefined)
 
     const open = () => {
       ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -88,9 +93,12 @@ export default defineComponent({
           })
         })
     }
+
     return {
-      value,
+      newDateValue,
       locale: zhCn,
+      voteForm,
+      minusRef,
       radio1: ref('男孩子'),
       radio2: ref('女孩子'),
       open
@@ -131,12 +139,12 @@ export default defineComponent({
       height: calc(100vh - 50px);
       .vote-main {
         border: 1px solid #ccc;
+        padding: 20px;
         width: 800px;
-        height: 107px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         border-radius: 4px;
-        line-height: 1;
-        margin: 18px 0px 0px 23px;
+        margin: auto;
+
         p {
           margin: 25px 0px 0px 37px;
           font-size: 17px;
@@ -144,29 +152,30 @@ export default defineComponent({
         .text {
           font-size: 10px;
           color: #c5c5c5;
-          margin: 21px 0px 0px 37px;
         }
       }
       .vote-main-bottom {
+        background-color: #fff;
+        margin: auto;
+        margin-top: 20px;
+        padding: 20px;
         border: 1px solid #ccc;
         width: 800px;
-        height: 250px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         border-radius: 4px;
-        margin: 23px 0px 0px 23px;
-        p {
-          font-size: 14px;
-          margin: 19px 0px 12px 37px;
+        display: flex;
+        gap: 20px;
+        .bottom-left {
+          flex: 2;
+          display: flex;
+          flex-direction: column;
+          .question-choose {
+            flex: auto;
+          }
         }
-        .icon {
-          float: right;
-          margin: -30px 35px 0px 0px;
-        }
-        .text-delete {
-          color: black;
-          font-size: 150%;
-          float: right;
-          margin: -43px 38px -5px 0px;
+        .bottom-right {
+          text-align: right;
+          flex: 1;
         }
       }
       .share {
@@ -175,6 +184,24 @@ export default defineComponent({
         padding: 11px 35px 10px 35px;
       }
     }
+  }
+}
+
+.input-dynamic {
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  &:hover {
+    border: 1px dashed #ccc;
+  }
+  &:focus {
+    background-color: #f4f4f4;
+    border: 1px solid #f4f4f4;
   }
 }
 </style>
