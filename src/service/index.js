@@ -5,7 +5,7 @@ const apiUrl = '/api'
 // 该函数是请求后端主接口的，有些请求需要token，这里可以传入
 export const http = async (
   endpoint,
-  { data, token, headers, ...customConfig } = {}
+  { data, token, headers, ...customConfig }
 ) => {
   console.log('token ==> ', token)
   const config = {
@@ -53,7 +53,10 @@ export const $GET = async (url, data = '') => {
   })
 }
 
-export const useHttp = () => {
-  const token = 'aaaaa'
-  return (...[endpoint, config]) => http(endpoint, { ...config, token })
+export const requestWithToken = async (url) => {
+  const token =
+    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE2MzE4NjYyNDg1MDMsImV4cCI6MTYzMTk1MjY0OH0.csw0qJ94-micZtviZnhY1KgTme6qZpgrBP6Y6wpbS5jGUUXHMCtedjhQlMrvAQ_wJmAnEBMaYn6hsFRNETY_jw'
+
+  const data = await http(url, { token })
+  return data
 }

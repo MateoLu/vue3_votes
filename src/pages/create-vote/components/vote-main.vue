@@ -10,7 +10,7 @@
         </el-aside>
         <el-main>
           <div class="vote-main">
-            <p>你们喜欢男孩子还是女孩子？</p>
+            <input type="text" class="input-text" />
             <div class="text">感谢你能抽出几分钟时间来参加答题，阿里嘎多！</div>
           </div>
           <div class="vote-main-bottom">
@@ -136,7 +136,7 @@ export default defineComponent({
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         border-radius: 4px;
         line-height: 1;
-        margin: 18px 0px 0px 23px;
+        margin: auto;
         p {
           margin: 25px 0px 0px 37px;
           font-size: 17px;
@@ -153,7 +153,7 @@ export default defineComponent({
         height: 250px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         border-radius: 4px;
-        margin: 23px 0px 0px 23px;
+        margin: 24px auto;
         p {
           font-size: 14px;
           margin: 19px 0px 12px 37px;
@@ -170,7 +170,8 @@ export default defineComponent({
         }
       }
       .share {
-        margin: 112px 0px 0px 364px;
+        display: block;
+        margin: auto;
         line-height: 16px;
         padding: 11px 35px 10px 35px;
       }

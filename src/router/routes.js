@@ -2,6 +2,8 @@
  * 路由配置目录
  */
 
+// import router from '.'
+
 const home = () => import('@/pages/home/index.vue')
 const login = () => import('@/pages/login/index.vue')
 const createVote = () => import('@/pages/create-vote/index.vue')
@@ -30,4 +32,5 @@ const routes = [
     component: Page404
   }
 ]
+
 export default routes
