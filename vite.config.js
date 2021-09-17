@@ -46,7 +46,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         // 代理接口
-        target: '',
+        target: 'http://47.106.210.214:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

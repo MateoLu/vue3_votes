@@ -179,7 +179,8 @@ export default defineComponent({
         }
       }
       .share {
-        margin: 112px 0px 0px 364px;
+        display: block;
+        margin: auto;
         line-height: 16px;
         padding: 11px 35px 10px 35px;
       }
