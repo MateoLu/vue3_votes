@@ -20,3 +20,7 @@ export const getToken = () => {
 export const setToken = (value) => {
   setItem('token', value)
 }
+
+export const removeToken = () => {
+  removeItem('token')
+}

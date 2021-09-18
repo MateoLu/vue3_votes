@@ -32,11 +32,9 @@
 // import { http } from '@/service'
 import { useStore } from 'vuex'
 import { getCurrentInstance, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 const { ctx } = getCurrentInstance()
 
-const router = useRouter()
 const store = useStore()
 const labelPosition = ref('right')
 const loginForm = ref(null)
@@ -65,7 +63,6 @@ const submitForm = (formName) => {
         username: formLabelAlign.username,
         password: formLabelAlign.password
       })
-      router.replace('/home')
     } else {
       alert('账号或密码不为空')
     }

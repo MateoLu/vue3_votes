@@ -15,7 +15,7 @@
 
         <!-- 个人信息和退出 -->
         <el-button>
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               <i class="el-icon-user"></i>
               admin
@@ -23,8 +23,9 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>
-                  <i class="el-icon-document">退出</i>
+                <el-dropdown-item command="logout">
+                  <i class="el-icon-switch-button"></i>
+                  退出登陆
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -36,11 +37,28 @@
 </template>
 
 <script>
+import { ElMessageBox } from 'element-plus'
+
 export default {
   name: 'TheHeader',
   methods: {
     goPage(address) {
       this.$router.push(address)
+    },
+    handleCommand(command) {
+      switch (command) {
+        case 'logout':
+          ElMessageBox.confirm('确定退出登陆吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              this.$store.dispatch('user/clearUser')
+            })
+            .catch(() => {})
+          break
+      }
     }
   }
 }

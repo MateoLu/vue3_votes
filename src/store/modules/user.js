@@ -1,5 +1,5 @@
-import { login } from '@/api/user'
-import { setToken } from '@/utils/storage'
+import { login, logout } from '@/api/user'
+import { removeToken, setToken } from '@/utils/storage'
 import { ElMessage } from 'element-plus'
 
 const user = {
@@ -10,6 +10,9 @@ const user = {
   mutations: {
     setUser(state, payload) {
       state.token = payload
+    },
+    clearUser(state) {
+      state.token = ''
     }
   },
   actions: {
@@ -20,10 +23,21 @@ const user = {
         ElMessage.success('登录成功')
         setToken(token)
         commit('setUser', token)
+        window.location.reload()
       } else {
         ElMessage.error(res.message)
       }
-      console.log('vuex user => ', res)
+    },
+    async clearUser({ commit }) {
+      const res = await logout()
+      if (res.code === 200) {
+        ElMessage.success('退出登陆成功')
+        removeToken()
+        commit('clearUser')
+        window.location.reload()
+      } else {
+        ElMessage.error(res.message)
+      }
     }
   }
 }

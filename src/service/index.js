@@ -8,7 +8,6 @@ export const http = async (
   endpoint,
   { data, token, headers, ...customConfig }
 ) => {
-  console.log('token ==> ', token)
   const config = {
     method: 'GET',
     headers: {
@@ -24,7 +23,7 @@ export const http = async (
   }
   return window.fetch(`${apiUrl}/${endpoint}`, config).then(async (res) => {
     if (res.status === 401) {
-      //   window.location.reload();
+      window.location.reload()
       return Promise.reject(new Error('请重新登录'))
     }
     const data = await res.json()
