@@ -2,11 +2,21 @@
   <div class="home-container">
     <TheHeader />
     <div class="home-wrapper">
+      <div class="title">我的项目</div>
       <!-- 搜索问卷模块 -->
       <div class="home-toolbar">
-        <div class="title">我的问卷</div>
+        <div class="status">
+          <el-select size="mini" v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
         <div class="search">
-          <el-input placeholder="投票项目搜索">
+          <el-input size="mini" placeholder="投票项目搜索">
             <template #suffix>
               <i class="el-icon-search el-input__icon"></i>
             </template>
@@ -23,7 +33,7 @@
           </div>
         </li>
         <VoteItem
-          v-for="item in votesData"
+          v-for="item in votesByStatus"
           :key="item.id"
           :title="item.name"
           :status="item.status"
@@ -34,7 +44,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import VoteItem from '@/components/VoteItem.vue'
 import { useRouter } from 'vue-router'
@@ -60,13 +70,41 @@ export default defineComponent({
       { id: 6, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 }
     ])
 
+    const votesByStatus = computed(() =>
+      value.value === 3
+        ? votesData.value
+        : votesData.value.filter((item) => item.status === value.value)
+    )
+
+    const value = ref(3)
+    const options = ref([
+      {
+        value: 3,
+        label: '项目状态'
+      },
+      {
+        value: 0,
+        label: '未发布'
+      },
+      {
+        value: 1,
+        label: '已发布'
+      },
+      {
+        value: 2,
+        label: '已过期'
+      }
+    ])
+
     const toPage = (address) => {
       router.push(address)
     }
 
     return {
       toPage,
-      votesData
+      votesByStatus,
+      options,
+      value
     }
   }
 })
@@ -82,16 +120,19 @@ export default defineComponent({
     padding: 20px;
     height: 100%;
     margin: auto;
+    .title {
+      margin: 20px 0 15px 0;
+      font-size: 14px;
+      color: #666766;
+    }
     .home-toolbar {
       margin-bottom: 20px;
       width: 100%;
       height: 40px;
-      line-height: 40px;
       display: flex;
-      justify-content: space-between;
-      .title {
-        font-size: 14px;
-        color: #666766;
+      gap: 10px;
+      .status {
+        width: 100px;
       }
     }
     .projects-wrapper {

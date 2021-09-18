@@ -32,6 +32,7 @@
 // import { http } from '@/service'
 import { useStore } from 'vuex'
 import { getCurrentInstance, reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 
 const { ctx } = getCurrentInstance()
 
@@ -64,7 +65,7 @@ const submitForm = (formName) => {
         password: formLabelAlign.password
       })
     } else {
-      alert('账号或密码不为空')
+      ElMessage.error('账号或密码不符合参数要求')
     }
   })
 }
