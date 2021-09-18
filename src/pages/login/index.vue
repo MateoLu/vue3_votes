@@ -4,21 +4,21 @@
       <el-form
         :label-position="labelPosition"
         label-width="80px"
-        :model="formLabelAlign"
-        :rules="rules"
+        :model="loginParams"
+        :rules="loginRules"
         ref="loginForm"
         class="login_From"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="formLabelAlign.username"></el-input>
+          <el-input v-model="loginParams.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input show-password v-model="formLabelAlign.password"></el-input>
+          <el-input show-password v-model="loginParams.password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-            @click="submitForm('loginForm')"
+            @click="submitLoginForm('loginForm')"
             class="btns"
           >
             登录
@@ -35,16 +35,16 @@ import { getCurrentInstance, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const { ctx } = getCurrentInstance()
-
 const store = useStore()
 const labelPosition = ref('right')
+
+// 登陆业务逻辑
 const loginForm = ref(null)
-const formLabelAlign = reactive({
+const loginParams = reactive({
   username: '',
   password: ''
 })
-
-const rules = reactive({
+const loginRules = reactive({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -56,19 +56,20 @@ const rules = reactive({
     }
   ]
 })
-
-const submitForm = (formName) => {
+const submitLoginForm = (formName) => {
   ctx.$refs[formName].validate((valid) => {
     if (valid) {
       store.dispatch('user/setUser', {
-        username: formLabelAlign.username,
-        password: formLabelAlign.password
+        username: loginParams.username,
+        password: loginParams.password
       })
     } else {
       ElMessage.error('账号或密码不符合参数要求')
     }
   })
 }
+
+// 注册业务逻辑
 </script>
 
 <style scoped lang="less">
