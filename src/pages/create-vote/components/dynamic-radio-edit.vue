@@ -3,18 +3,33 @@
     <input
       @blur="handleBlur"
       @focus="handleFocus"
-      v-model="this.$props.question"
+      @change="
+        (e) => {
+          if (e.target.value === '') {
+            e.target.value = '选项'
+            $emit('update:text', '选项')
+          } else {
+            $emit('update:text', e.target.value)
+          }
+        }
+      "
+      :value="text"
       ref="conRef"
       class="input-dynamic-radio"
     />
-    <el-button
-      v-show="isShow"
-      id="minus"
-      circle
-      icon="el-icon-minus"
-      size="mini"
-      type="info"
-    ></el-button>
+    <el-tooltip effect="dark" content="删除" placement="top">
+      <el-button
+        v-show="isShow"
+        circle
+        icon="el-icon-minus"
+        size="mini"
+        :type="isOver ? 'danger' : 'info'"
+        style="vertical-align: middle"
+        @mouseenter="btnOver"
+        @mouseleave="btnOut"
+        @click="$emit('remove', id)"
+      ></el-button>
+    </el-tooltip>
   </div>
 </template>
 
@@ -24,18 +39,28 @@ const isShow = ref(false)
 const conRef = ref(undefined)
 
 defineProps({
-  question: {
-    type: String,
-    default: '选项'
+  text: {
+    type: String
+  },
+  id: {
+    type: String
   }
 })
+
+const isOver = ref(false)
+const btnOver = () => {
+  isOver.value = true
+}
+
+const btnOut = () => {
+  isOver.value = false
+}
 
 const handleOver = () => {
   if (conRef.value === document.activeElement) {
     conRef.value.style.border = '1px solid #f4f4f4'
   } else {
-    conRef.value.style.borderStyle = 'dashed'
-    conRef.value.style.borderColor = '#ccc'
+    conRef.value.style.border = '1px dashed #ccc'
     isShow.value = true
   }
 }
@@ -65,6 +90,7 @@ const handleFocus = () => {
   position: relative;
   box-sizing: border-box;
   margin-bottom: 10px;
+  height: 30px;
   &::before {
     content: '';
     position: absolute;

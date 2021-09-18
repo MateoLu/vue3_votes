@@ -10,23 +10,40 @@
         </el-aside>
         <el-main>
           <div class="vote-main">
-            <input v-model="voteForm.title" class="input-dynamic" />
+            <input v-model="voteForm.title" class="input-dynamic input-title" />
             <div class="text">感谢你能抽出几分钟时间来参加答题，阿里嘎多！</div>
           </div>
           <div class="vote-main-bottom">
             <div class="bottom-left">
               <div class="question-box">
-                <input v-model="voteForm.question" class="input-dynamic" />
+                <input
+                  v-model="voteForm.question"
+                  class="input-dynamic input-question"
+                />
               </div>
               <div class="question-choose">
-                <DynamicRadioEdit />
-                <DynamicRadioEdit />
+                <DynamicRadioEdit
+                  v-for="item in optionArr"
+                  v-model:text="item.value"
+                  :key="item.id"
+                  :id="item.id"
+                  @remove="removeDynamicInput"
+                />
+              </div>
+              <div class="add-option">
+                <el-button
+                  @click="handleAddOption"
+                  type="text"
+                  icon="el-icon-plus"
+                >
+                  添加单个选项
+                </el-button>
               </div>
             </div>
             <div class="bottom-right"></div>
           </div>
           <!-- 发布并分享按钮 -->
-          <el-button type="primary" @click="open" class="share">
+          <el-button type="primary" @click="handleSubmit" class="share">
             发布并分享
           </el-button>
         </el-main>
@@ -50,11 +67,12 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref, reactive, watch } from 'vue'
 import DynamicRadioEdit from './dynamic-radio-edit.vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import { Edit, Minus } from '@element-plus/icons'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { nanoid } from 'nanoid'
 
 export default defineComponent({
   name: 'Main',
@@ -68,28 +86,48 @@ export default defineComponent({
     const newDateValue = ref(new Date())
 
     const voteForm = reactive({
-      title: '',
-      question: ''
+      title: '大标题',
+      question: '问题'
     })
 
-    const minusRef = ref(undefined)
+    const optionArr = ref([])
 
-    const open = () => {
-      ElMessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    watch(
+      optionArr.value,
+      (newVal, oldVal) => {
+        console.log(newVal)
+      },
+      { deep: true }
+    )
+
+    const removeDynamicInput = (id) => {
+      optionArr.value = optionArr.value.filter((item) => item.id !== id)
+    }
+
+    const handleAddOption = () => {
+      optionArr.value.push({
+        id: nanoid(),
+        value: '选项'
+      })
+    }
+
+    // 提交问题表单
+    const handleSubmit = () => {
+      ElMessageBox.confirm('确认是否发布此投票?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'info'
       })
         .then(() => {
           ElMessage({
             type: 'success',
-            message: '删除成功!'
+            message: '发布成功!'
           })
         })
         .catch(() => {
           ElMessage({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消发布'
           })
         })
     }
@@ -98,10 +136,10 @@ export default defineComponent({
       newDateValue,
       locale: zhCn,
       voteForm,
-      minusRef,
-      radio1: ref('男孩子'),
-      radio2: ref('女孩子'),
-      open
+      handleSubmit,
+      optionArr,
+      handleAddOption,
+      removeDynamicInput
     }
   }
 })
@@ -117,7 +155,6 @@ export default defineComponent({
     height: 100%;
     background-color: #f3f5f6;
     .el-aside {
-      background-color: #f2f2f2;
       width: 257px;
       height: 100%;
       h3 {
@@ -139,6 +176,7 @@ export default defineComponent({
       height: calc(100vh - 50px);
       .vote-main {
         border: 1px solid #ccc;
+        background-color: #fff;
         padding: 20px;
         width: 800px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -169,8 +207,15 @@ export default defineComponent({
           flex: 2;
           display: flex;
           flex-direction: column;
+          gap: 10px;
           .question-choose {
             flex: auto;
+          }
+          .add-option {
+            flex: none;
+            height: 50px;
+            line-height: 50px;
+            padding: 0 15px;
           }
         }
         .bottom-right {
@@ -180,7 +225,7 @@ export default defineComponent({
       }
       .share {
         display: block;
-        margin: auto;
+        margin: 20px auto;
         line-height: 16px;
         padding: 11px 35px 10px 35px;
       }
@@ -195,8 +240,16 @@ export default defineComponent({
   width: 100%;
   height: 30px;
   background-color: transparent;
-  border: none;
+  border: 1px solid #fff;
   outline: none;
+  &.input-title {
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+  }
+  &.input-question {
+    font-size: 20px;
+  }
   &:hover {
     border: 1px dashed #ccc;
   }

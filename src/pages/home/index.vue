@@ -2,83 +2,71 @@
   <div class="home-container">
     <TheHeader />
     <div class="home-wrapper">
-      <el-container>
-        <el-aside width="200px">
-          <el-button
-            @click="goPage('/create-vote')"
-            type="primary"
-            class="el-btn"
-          >
-            创建问卷
-          </el-button>
-          <!-- 边框 -->
-          <div class="el-border">
-            <p>您已创建{{ voteLength }}个问卷</p>
-          </div>
-        </el-aside>
-        <el-main>
-          <!-- 问卷列表+搜索框 -->
-          <div class="list-container">
-            <el-row :gutter="20">
-              <el-col :span="14">
-                <div class="grid-content">问卷列表</div>
-              </el-col>
-              <el-col :span="10">
-                <el-input
-                  placeholder="请输入内容"
-                  suffix-icon="el-icon-search"
-                  v-model="input2"
-                ></el-input>
-              </el-col>
-            </el-row>
-          </div>
+      <!-- 搜索问卷模块 -->
+      <div class="home-toolbar">
+        <div class="title">我的问卷</div>
+        <div class="search">
+          <el-input placeholder="投票项目搜索">
+            <template #suffix>
+              <i class="el-icon-search el-input__icon"></i>
+            </template>
+          </el-input>
+        </div>
+      </div>
 
-          <div class="list-votes">
-            <VoteItem
-              v-for="item in votes"
-              :key="item.id"
-              :id="item.id"
-              :title="item.title"
-              :num="item.num"
-              :time="item.time"
-            />
+      <!-- 创建项目及项目列表 -->
+      <ul class="projects-wrapper">
+        <li class="project-item">
+          <div class="create-project" @click="toPage('/create-vote')">
+            <i style="font-weight: bold" class="el-icon-plus"></i>
+            创建投票
           </div>
-        </el-main>
-      </el-container>
+        </li>
+        <VoteItem
+          v-for="item in votesData"
+          :key="item.id"
+          :title="item.name"
+          :status="item.status"
+          :overDate="item.date"
+        />
+      </ul>
     </div>
   </div>
 </template>
 <script>
-import { defineComponent, ref, onMounted, computed } from 'vue'
-import VoteItem from '@/components/VoteItem.vue'
+import { defineComponent, ref } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
+import VoteItem from '@/components/VoteItem.vue'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
-    VoteItem,
-    TheHeader
+    TheHeader,
+    VoteItem
   },
   setup() {
-    const votes = ref([
-      { id: 1, title: '你喜欢男的还是女的?', num: 2, time: '2018年10月2日' },
-      { id: 2, title: '你喜欢男的还是女的?', num: 2, time: '2018年10月2日' },
-      { id: 3, title: '你喜欢男的还是女的?', num: 2, time: '2018年10月2日' }
+    const router = useRouter()
+    const votesData = ref([
+      {
+        id: 1,
+        date: '2021年9月21日',
+        name: '你喜欢男孩还是女孩hahahahahahahah？',
+        status: 0
+      },
+      { id: 2, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 },
+      { id: 3, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 },
+      { id: 4, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 2 },
+      { id: 5, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 0 },
+      { id: 6, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 }
     ])
 
-    const router = useRouter()
-
-    onMounted(() => {})
-
-    const goPage = (address) => {
+    const toPage = (address) => {
       router.push(address)
     }
 
     return {
-      votes,
-      voteLength: computed(() => votes.value.length),
-      input2: ref(''),
-      goPage
+      toPage,
+      votesData
     }
   }
 })
@@ -88,59 +76,48 @@ export default defineComponent({
 .home-container {
   width: 100vw;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
   .home-wrapper {
-    max-width: 1048px;
+    max-width: 1176px;
+    padding: 20px;
     height: 100%;
     margin: auto;
-
-    .el-main {
-      text-align: center;
-      line-height: 160px;
-      .list-container {
-        margin: -42px 0 0 0px;
-        .row-bg {
-          padding: 10px 0;
-          background-color: #f9fafc;
-        }
-        .el-row {
-          margin-bottom: 20px;
-          &:last-child {
-            margin-bottom: 0;
+    .home-toolbar {
+      margin-bottom: 20px;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      display: flex;
+      justify-content: space-between;
+      .title {
+        font-size: 14px;
+        color: #666766;
+      }
+    }
+    .projects-wrapper {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      list-style: none;
+      padding: 0;
+      .project-item {
+        width: 269px;
+        height: 175px;
+        .create-project {
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+          border-radius: 5px;
+          box-shadow: -2px 4px 5px 0 rgb(0 0 0 / 6%);
+          text-align: center;
+          line-height: 175px;
+          color: #3c70f6;
+          cursor: pointer;
+          &:hover {
+            box-shadow: -3px 6px 12px 0 rgb(0 0 0 / 10%);
           }
         }
-        .el-col {
-          border-radius: 4px;
-        }
-        .grid-content {
-          border-radius: 4px;
-          margin: 4px 173px 0px -163px;
-          min-height: 36px;
-          font-size: 19px;
-        }
-      }
-      .list-votes {
-        width: 100%;
-        height: 50%;
-      }
-    }
-    .el-btn {
-      margin: 35px 0px 0px 19px;
-      min-height: 45px;
-      min-width: 163px;
-      border: #e6a23c;
-      font-size: 15px;
-    }
-    .el-border {
-      background: #e9eef3;
-      width: 188px;
-      height: 430px;
-      margin: 35px auto;
-
-      p {
-        font-size: 13px;
-        margin: 0px 0px 31px 45px;
-        padding: 32px 0 0 0;
       }
     }
   }
