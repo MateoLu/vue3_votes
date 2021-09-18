@@ -30,12 +30,14 @@
 </template>
 <script setup>
 // import { http } from '@/service'
+import { useStore } from 'vuex'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const { ctx } = getCurrentInstance()
 
 const router = useRouter()
+const store = useStore()
 const labelPosition = ref('right')
 const loginForm = ref(null)
 const formLabelAlign = reactive({
@@ -59,10 +61,13 @@ const rules = reactive({
 const submitForm = (formName) => {
   ctx.$refs[formName].validate((valid) => {
     if (valid) {
-      router.push('/home')
+      store.dispatch('user/setUser', {
+        username: formLabelAlign.username,
+        password: formLabelAlign.password
+      })
+      router.replace('/home')
     } else {
-      console.log('error submit!!')
-      return false
+      alert('账号或密码不为空')
     }
   })
 }

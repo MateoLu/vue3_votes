@@ -4,7 +4,7 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { requestWithToken } from './service'
+import { requestWithToken } from '@/service'
 
 onMounted(async () => {
   // 测试接口方法

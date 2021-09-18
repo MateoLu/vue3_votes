@@ -1,9 +1,11 @@
 import Vuex from 'vuex'
+import user from './modules/user'
 
-const state = {
-  token: window.localStorage.getItem('token')
-}
+const state = {}
 
 export default new Vuex.Store({
-  state
+  state,
+  modules: {
+    user
+  }
 })
