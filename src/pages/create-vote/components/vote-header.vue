@@ -42,31 +42,15 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-* {
-  margin: 0;
-  padding: 0;
-}
 .header-container {
+  position: relative;
   width: 100%;
-  height: 50px;
+  height: 60px;
   background-color: #fff;
-  box-shadow: 1px 3px 2px #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 0 20px;
-  .left {
-    float: left;
-    line-height: 50px;
-  }
-  .center > .el-breadcrumb {
-    float: left;
-    line-height: 50px;
-    margin-left: 45%;
-  }
-  .right {
-    float: right;
-    line-height: 50px;
-  }
-  .right > .el-button {
-    padding: 0 15px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

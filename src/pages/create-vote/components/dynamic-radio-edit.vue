@@ -24,7 +24,6 @@
         icon="el-icon-minus"
         size="mini"
         :type="isOver ? 'danger' : 'info'"
-        style="vertical-align: middle"
         @mouseenter="btnOver"
         @mouseleave="btnOut"
         @click="$emit('remove', id)"
@@ -106,7 +105,7 @@ const handleFocus = () => {
     box-sizing: border-box;
     padding-left: 40px;
     margin-right: 20px;
-    width: 80%;
+    width: 65%;
     height: 30px;
     background-color: transparent;
     border: 1px solid #fff;

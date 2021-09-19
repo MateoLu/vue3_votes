@@ -1,75 +1,61 @@
 <template>
-  <div class="home-container">
-    <div class="home-wrapper">
-      <el-container>
-        <el-aside>
-          <!-- 选项 -->
-          <h3>选择题</h3>
-          <el-button plain>单选题</el-button>
-          <el-button plain>多选题</el-button>
-        </el-aside>
-        <el-main>
-          <div class="vote-main">
-            <input v-model="voteForm.title" class="input-dynamic input-title" />
-            <div class="text">感谢你能抽出几分钟时间来参加答题，阿里嘎多！</div>
+  <main class="main-wrapper">
+    <aside class="el-aside">
+      <!-- 选项 -->
+      <div>
+        <h4>投票类型</h4>
+        <el-radio-group v-model="voteType" size="mini">
+          <el-radio label="0" border>单选</el-radio>
+          <el-radio label="1" border>多选</el-radio>
+        </el-radio-group>
+      </div>
+      <div>
+        <h4>投票过期时间</h4>
+        <el-date-picker
+          v-model="expTime"
+          type="datetime"
+          placeholder="选择日期时间"
+          value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+          :default-time="defaultTime"
+        ></el-date-picker>
+      </div>
+    </aside>
+    <section class="el-main">
+      <div class="vote-main">
+        <div class="bottom-left">
+          <div class="question-box">
+            <input
+              v-model="voteForm.question"
+              class="input-dynamic input-question"
+            />
           </div>
-          <div class="vote-main-bottom">
-            <div class="bottom-left">
-              <div class="question-box">
-                <input
-                  v-model="voteForm.question"
-                  class="input-dynamic input-question"
-                />
-              </div>
-              <div class="question-choose">
-                <DynamicRadioEdit
-                  v-for="item in optionArr"
-                  v-model:text="item.value"
-                  :key="item.id"
-                  :id="item.id"
-                  @remove="removeDynamicInput"
-                />
-              </div>
-              <div class="add-option">
-                <el-button
-                  @click="handleAddOption"
-                  type="text"
-                  icon="el-icon-plus"
-                >
-                  添加单个选项
-                </el-button>
-              </div>
-            </div>
-            <div class="bottom-right"></div>
+          <div class="question-choose">
+            <DynamicRadioEdit
+              v-for="item in optionArr"
+              v-model:text="item.value"
+              :key="item.id"
+              :id="item.id"
+              @remove="removeDynamicInput"
+            />
           </div>
-          <!-- 发布并分享按钮 -->
-          <el-button type="primary" @click="handleSubmit" class="share">
-            发布并分享
-          </el-button>
-        </el-main>
-        <el-aside style="width: 450px">
-          <div class="calendar">
-            <!--日历图表-->
-            <el-row :gutter="20" class="home_head">
-              <el-col>
-                <el-card>
-                  <el-config-provider :locale="locale">
-                    <el-calendar v-model="newDateValue"></el-calendar>
-                  </el-config-provider>
-                </el-card>
-              </el-col>
-            </el-row>
+          <div class="add-option">
+            <el-button @click="handleAddOption" type="text" icon="el-icon-plus">
+              添加单个选项
+            </el-button>
           </div>
-        </el-aside>
-      </el-container>
-    </div>
-  </div>
+        </div>
+      </div>
+      <!-- 发布并分享按钮 -->
+      <el-button type="primary" @click="handleSubmit" class="share">
+        发布并分享
+      </el-button>
+    </section>
+  </main>
 </template>
 
 <script>
 import { defineComponent, ref, reactive, watch } from 'vue'
 import DynamicRadioEdit from './dynamic-radio-edit.vue'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import { Edit, Minus } from '@element-plus/icons'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { nanoid } from 'nanoid'
@@ -83,12 +69,13 @@ export default defineComponent({
     DynamicRadioEdit
   },
   setup() {
-    const newDateValue = ref(new Date())
-
     const voteForm = reactive({
-      title: '大标题',
       question: '问题'
     })
+
+    const voteType = ref('0')
+    const expTime = ref('')
+    const defaultTime = ref(new Date())
 
     const optionArr = ref([])
 
@@ -133,9 +120,10 @@ export default defineComponent({
     }
 
     return {
-      newDateValue,
-      locale: zhCn,
       voteForm,
+      voteType,
+      expTime,
+      defaultTime,
       handleSubmit,
       optionArr,
       handleAddOption,
@@ -146,89 +134,52 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-.home-container {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  .home-wrapper {
-    width: 100%;
-    height: 100%;
-    background-color: #f3f5f6;
-    .el-aside {
-      width: 257px;
-      height: 100%;
-      h3 {
-        margin: 32px 0px 0px 27px;
-      }
-      button {
-        margin: 23px 0px 0 75px;
-        padding: 10px 33px 10px 33px;
-      }
-      .calendar {
-        width: 450px;
-        height: 100%;
-        overflow: hidden;
+.main-wrapper {
+  display: flex;
+  z-index: 1;
+  .el-aside {
+    width: 400px;
+    height: calc(100vh - 60px);
+    padding: 20px;
+    background-color: #fff;
+    border-right: 1px solid #dfe5ec;
+    color: #484848;
+  }
+
+  .el-main {
+    flex: auto;
+    height: calc(100vh - 60px);
+    .vote-main {
+      background-color: #fff;
+      width: 70%;
+      margin: auto;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      display: flex;
+      gap: 20px;
+      .bottom-left {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        .question-choose {
+          flex: auto;
+        }
+        .add-option {
+          flex: none;
+          height: 50px;
+          line-height: 50px;
+          padding: 0 15px;
+        }
       }
     }
-
-    .el-main {
-      background-color: #f8f8f8;
-      height: calc(100vh - 50px);
-      .vote-main {
-        border: 1px solid #ccc;
-        background-color: #fff;
-        padding: 20px;
-        width: 800px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        margin: auto;
-
-        p {
-          margin: 25px 0px 0px 37px;
-          font-size: 17px;
-        }
-        .text {
-          font-size: 10px;
-          color: #c5c5c5;
-        }
-      }
-      .vote-main-bottom {
-        background-color: #fff;
-        margin: auto;
-        margin-top: 20px;
-        padding: 20px;
-        border: 1px solid #ccc;
-        width: 800px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        display: flex;
-        gap: 20px;
-        .bottom-left {
-          flex: 2;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          .question-choose {
-            flex: auto;
-          }
-          .add-option {
-            flex: none;
-            height: 50px;
-            line-height: 50px;
-            padding: 0 15px;
-          }
-        }
-        .bottom-right {
-          text-align: right;
-          flex: 1;
-        }
-      }
-      .share {
-        display: block;
-        margin: 20px auto;
-        line-height: 16px;
-        padding: 11px 35px 10px 35px;
-      }
+    .share {
+      display: block;
+      margin: 20px auto;
+      line-height: 16px;
+      padding: 11px 35px 10px 35px;
     }
   }
 }
@@ -242,13 +193,11 @@ export default defineComponent({
   background-color: transparent;
   border: 1px solid #fff;
   outline: none;
-  &.input-title {
-    height: 40px;
+  color: #484848;
+
+  &.input-question {
     font-size: 24px;
     text-align: center;
-  }
-  &.input-question {
-    font-size: 20px;
   }
   &:hover {
     border: 1px dashed #ccc;
