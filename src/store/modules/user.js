@@ -16,6 +16,7 @@ const user = {
     }
   },
   actions: {
+    // 判断登录是否成功并获取token
     async setUser({ commit }, payload) {
       const res = await login(payload)
       if (res.code === 200) {
