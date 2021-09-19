@@ -5,8 +5,8 @@
       <div>
         <h4>投票类型</h4>
         <el-radio-group v-model="voteType" size="mini">
-          <el-radio label="0" border>单选</el-radio>
-          <el-radio label="1" border>多选</el-radio>
+          <el-radio :label="0" border>单选</el-radio>
+          <el-radio :label="1" border>多选</el-radio>
         </el-radio-group>
       </div>
       <div>
@@ -18,6 +18,17 @@
           value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
           :default-time="defaultTime"
         ></el-date-picker>
+      </div>
+      <div>
+        <h4>投票检查类型</h4>
+        <el-select size="mini" v-model="checkTypeValue" placeholder="请选择">
+          <el-option
+            v-for="item in checkList"
+            :key="item.id"
+            :label="item.checkType"
+            :value="item.id"
+          ></el-option>
+        </el-select>
       </div>
     </aside>
     <section class="el-main">
@@ -54,11 +65,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch } from 'vue'
+import { defineComponent, ref, reactive, computed } from 'vue'
 import DynamicRadioEdit from './dynamic-radio-edit.vue'
 import { Edit, Minus } from '@element-plus/icons'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { nanoid } from 'nanoid'
+import { useStore } from 'vuex'
+import { useVote } from '@/hooks/vote'
 
 export default defineComponent({
   name: 'Main',
@@ -69,23 +82,23 @@ export default defineComponent({
     DynamicRadioEdit
   },
   setup() {
+    const store = useStore()
+    const { makeVote } = useVote()
+    const checkList = computed(() => store.state.checkList)
+    const checkTypeValue = ref(1)
+
     const voteForm = reactive({
       question: '问题'
     })
 
-    const voteType = ref('0')
+    const voteType = ref(0)
     const expTime = ref('')
     const defaultTime = ref(new Date())
 
     const optionArr = ref([])
-
-    watch(
-      optionArr.value,
-      (newVal, oldVal) => {
-        console.log(newVal)
-      },
-      { deep: true }
-    )
+    const optionsInputValue = computed(() => {
+      return optionArr.value.map((item) => ({ name: item.value }))
+    })
 
     const removeDynamicInput = (id) => {
       optionArr.value = optionArr.value.filter((item) => item.id !== id)
@@ -105,11 +118,16 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'info'
       })
-        .then(() => {
-          ElMessage({
-            type: 'success',
-            message: '发布成功!'
-          })
+        .then(async () => {
+          const params = {
+            checkId: checkTypeValue.value,
+            expirationDate: expTime.value,
+            isMultiple: voteType.value,
+            name: voteForm.question,
+            optionList: optionsInputValue.value,
+            status: 1
+          }
+          await makeVote(params)
         })
         .catch(() => {
           ElMessage({
@@ -127,7 +145,9 @@ export default defineComponent({
       handleSubmit,
       optionArr,
       handleAddOption,
-      removeDynamicInput
+      removeDynamicInput,
+      checkList,
+      checkTypeValue
     }
   }
 })

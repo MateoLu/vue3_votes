@@ -37,19 +37,30 @@
           :key="item.id"
           :title="item.name"
           :status="item.status"
-          :overDate="item.date"
+          :overDate="item.expirationDate"
         />
       </ul>
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          :page-size="7"
+          :total="pager.total"
+        ></el-pagination>
+      </div>
       <div class="foot"></div>
       <footer class="footer">&copy; GGS · 甄步绰小组</footer>
     </div>
   </div>
 </template>
 <script>
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import TheHeader from '@/components/TheHeader.vue'
 import VoteItem from '@/components/VoteItem.vue'
 import { useRouter } from 'vue-router'
+import { useVote } from '@/hooks/vote'
+import store from '@/store'
 
 export default defineComponent({
   components: {
@@ -57,27 +68,17 @@ export default defineComponent({
     VoteItem
   },
   setup() {
+    const { setVotes, votes, pager } = useVote()
+
+    onMounted(async () => {
+      await setVotes(1)
+      await store.dispatch('getCheckList')
+      console.log(votes.value)
+    })
+
     const router = useRouter()
-    const votesData = ref([
-      {
-        id: 1,
-        date: '2021年9月21日',
-        name: '你喜欢男孩还是女孩hahahahahahahah？',
-        status: 0
-      },
-      { id: 2, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 },
-      { id: 3, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 },
-      { id: 4, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 2 },
-      { id: 5, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 0 },
-      { id: 6, date: '2021年9月21日', name: '你喜欢男孩还是女孩？', status: 1 }
-    ])
 
-    const votesByStatus = computed(() =>
-      value.value === 3
-        ? votesData.value
-        : votesData.value.filter((item) => item.status === value.value)
-    )
-
+    // 投票问卷数据及过滤
     const value = ref(3)
     const options = ref([
       {
@@ -97,16 +98,30 @@ export default defineComponent({
         label: '已过期'
       }
     ])
+    const votesByStatus = computed(() =>
+      value.value === 3
+        ? votes.value
+        : votes.value.filter((item) => item.status === value.value)
+    )
 
+    // 路由跳转
     const toPage = (address) => {
       router.push(address)
     }
 
+    // 改变当前页
+    const handleCurrentChange = async (val) => {
+      console.log(`当前页: ${val}`)
+      await setVotes(val)
+    }
+
     return {
       toPage,
+      handleCurrentChange,
       votesByStatus,
       options,
-      value
+      value,
+      pager
     }
   }
 })
@@ -122,6 +137,10 @@ export default defineComponent({
     padding: 20px;
     height: calc(100% - 60px);
     margin: auto;
+    .pagination {
+      margin-top: 50px;
+      text-align: center;
+    }
     .title {
       margin: 20px 0 15px 0;
       font-size: 14px;

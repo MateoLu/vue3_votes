@@ -7,3 +7,7 @@ export const login = async (params) => {
 export const logout = async () => {
   return await requestWithToken('user/logout', { method: 'POST' })
 }
+
+export const register = async (params) => {
+  return await http('user/register', { data: params, method: 'POST' })
+}

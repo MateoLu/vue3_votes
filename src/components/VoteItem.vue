@@ -9,7 +9,9 @@
         <div v-if="status == 0" class="notpub">未发布</div>
         <div v-if="status == 1" class="pub">已发布</div>
         <div v-if="status == 2" class="overdue">已过期</div>
-        <div class="expiration-date">截止日期：{{ overDate }}</div>
+        <div class="expiration-date">
+          截止日期：{{ dayjs(overDate).format('YYYY-MM-DD HH:mm:ss') }}
+        </div>
       </div>
       <ul class="toolbar">
         <li class="tool-item">
@@ -52,6 +54,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
+import dayjs from 'dayjs'
 
 defineProps({
   status: {

@@ -1,11 +1,11 @@
 import { login, logout } from '@/api/user'
-import { removeToken, setToken } from '@/utils/storage'
+import { getToken, removeToken, setToken } from '@/utils/storage'
 import { ElMessage } from 'element-plus'
 
 const user = {
   namespaced: true,
   state: () => ({
-    token: ''
+    token: getToken() || ''
   }),
   mutations: {
     setUser(state, payload) {

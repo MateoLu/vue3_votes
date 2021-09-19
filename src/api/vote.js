@@ -17,3 +17,20 @@
   "userId": 0
 }
 */
+
+import { requestWithToken } from '@/service'
+
+// 分页查询投票问卷接口
+export const getVotesByPage = async (pageNum) => {
+  return await requestWithToken('question/list', {
+    data: { pageNum, pageSize: 7 }
+  })
+}
+
+// 创建投票问卷接口
+export const createVote = async (params) => {
+  return await requestWithToken('question/create', {
+    method: 'POST',
+    data: params
+  })
+}

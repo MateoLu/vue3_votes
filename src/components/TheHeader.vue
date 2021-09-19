@@ -18,7 +18,7 @@
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               <i class="el-icon-user"></i>
-              admin
+              {{ username }}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <template #dropdown>
@@ -37,10 +37,17 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/storage'
 import { ElMessageBox } from 'element-plus'
+import jwtDecode from 'jwt-decode'
 
 export default {
   name: 'TheHeader',
+  computed: {
+    username() {
+      return jwtDecode(getToken()).sub
+    }
+  },
   methods: {
     goPage(address) {
       this.$router.push(address)

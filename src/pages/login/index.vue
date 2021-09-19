@@ -34,7 +34,7 @@
                   @click="submitLoginForm('loginForm')"
                   class="btns"
                 >
-                  登录
+                  登 录
                 </el-button>
               </el-form-item>
             </el-form>
@@ -67,17 +67,18 @@
               </el-form-item>
               <el-form-item>
                 <el-button
-                  type="primary"
+                  type="success"
                   @click="submitregisterForm('registerForm')"
                   class="btns"
                 >
-                  注册
+                  注 册
                 </el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
         </el-tabs>
       </div>
+      <footer class="footer">&copy; GGS · 甄步绰小组</footer>
       <div class="bg2"></div>
       <div class="bg3"></div>
     </div>
@@ -87,6 +88,7 @@
 import { useStore } from 'vuex'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { register } from '@/api/user'
 
 const { ctx } = getCurrentInstance()
 const store = useStore()
@@ -155,12 +157,26 @@ const registerRules = reactive({
   ]
 })
 const submitregisterForm = (formName) => {
-  ctx.$refs[formName].validate((valid) => {
+  ctx.$refs[formName].validate(async (valid) => {
     if (valid) {
-      console.log(1)
+      if (registerParams.password === registerParams.confirmPassword) {
+        const res = await register({
+          username: registerParams.username,
+          password: registerParams.password
+        })
+
+        if (res.code === 200) {
+          ElMessage.success('注册成功')
+        } else {
+          ElMessage.error(res.message)
+        }
+      } else {
+        ElMessage.error('密码不一致')
+      }
     } else {
       ElMessage.error('账号或密码不符合参数要求')
     }
+    registerForm.value.resetFields()
   })
 }
 </script>
@@ -178,15 +194,19 @@ const submitregisterForm = (formName) => {
     position: absolute;
     width: 800px;
     height: 480px;
-    right: 0;
+    left: 0;
     bottom: 40px;
     background: url(../../assets/images/login_voting.svg) no-repeat;
     background-size: 100% 100%;
   }
 
+  .btns {
+    margin-left: 35%;
+  }
+
   .bg1 {
     position: absolute;
-    left: 0;
+    right: 0;
     top: 0;
     padding: 40px 80px;
     width: 55%;
@@ -202,28 +222,36 @@ const submitregisterForm = (formName) => {
       font-size: 16px;
       font-weight: lighter;
     }
+    .footer {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      text-align: center;
+      font-weight: lighter;
+      color: #fff;
+    }
     .bg2 {
       position: absolute;
-      right: -25%;
+      left: -25%;
       top: 0;
       width: 25%;
       height: 50%;
       background-color: #0389f7;
-      border-radius: 0 0 100% 0;
+      border-radius: 0 0 0 100%;
     }
     .bg3 {
       position: absolute;
-      right: 0;
+      left: 0;
       bottom: 0;
       width: 20%;
       height: 50%;
       background-color: #f7f8fa;
-      border-radius: 100% 0 0 0;
+      border-radius: 0 100% 0 0;
     }
   }
   .login-wrapper {
     z-index: 9;
-    margin-top: 20%;
+    margin: 20% 0 0 30%;
     width: 65%;
     .tab {
       padding: 15px 20px 0 20px;
