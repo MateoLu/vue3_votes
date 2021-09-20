@@ -3,11 +3,13 @@
   <div class="header-container">
     <!-- 左侧返回     -->
     <div class="left">
-      <el-button type="text" style="color: black" @click="goPage('/home')">
-        <el-icon>
-          <arrow-left-bold />
-        </el-icon>
-      </el-button>
+      <el-button
+        size="medium"
+        icon="el-icon-arrow-left"
+        type="text"
+        style="color: black"
+        @click="goPage('/home')"
+      ></el-button>
     </div>
     <!-- 中间编辑项目 -->
     <div class="center">
@@ -24,15 +26,9 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import { Edit, ArrowLeftBold } from '@element-plus/icons'
 
 export default defineComponent({
   name: 'VoteHeader',
-  components: {
-    // 全名
-    [Edit.name]: Edit,
-    ArrowLeftBold
-  },
   methods: {
     goPage(address) {
       this.$router.push(address)

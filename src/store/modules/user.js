@@ -1,6 +1,7 @@
-import { login, logout } from '@/api/user'
-import { getToken, removeToken, setToken } from '@/utils/storage'
-import { ElMessage } from 'element-plus'
+import { logout } from '@/api/user'
+import router from '@/router'
+import { getToken, removeToken } from '@/utils/storage'
+import { ElNotification } from 'element-plus'
 
 const user = {
   namespaced: true,
@@ -12,32 +13,33 @@ const user = {
       state.token = payload
     },
     clearUser(state) {
+      removeToken()
       state.token = ''
     }
   },
   actions: {
     // 判断登录是否成功并获取token
     async setUser({ commit }, payload) {
-      const res = await login(payload)
-      if (res.code === 200) {
-        const token = res.data.token
-        ElMessage.success('登录成功')
-        setToken(token)
-        commit('setUser', token)
-        window.location.reload()
-      } else {
-        ElMessage.error(res.message)
-      }
+      commit('setUser', payload)
     },
     async clearUser({ commit }) {
       const res = await logout()
       if (res.code === 200) {
-        ElMessage.success('退出登陆成功')
-        removeToken()
-        commit('clearUser')
-        window.location.reload()
+        ElNotification({
+          title: '提示',
+          message: '用户已退出登陆！',
+          type: 'success',
+          duration: 2000
+        })
+        await commit('clearUser')
+        router.replace('/login')
       } else {
-        ElMessage.error(res.message)
+        ElNotification({
+          title: '提示',
+          message: '用户退出登陆失败！',
+          type: 'error',
+          duration: 2000
+        })
       }
     }
   }

@@ -30,6 +30,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button
+                  :loading="loading"
                   type="primary"
                   @click="submitLoginForm('loginForm')"
                   class="btns"
@@ -67,6 +68,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button
+                  :loading="loading"
                   type="success"
                   @click="submitregisterForm('registerForm')"
                   class="btns"
@@ -85,13 +87,14 @@
   </div>
 </template>
 <script setup>
-import { useStore } from 'vuex'
+// import { useStore } from 'vuex'
 import { getCurrentInstance, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { register } from '@/api/user'
+import { useAuth } from '@/hooks/auth'
 
 const { ctx } = getCurrentInstance()
-const store = useStore()
+// const store = useStore()
+const { userLogin, loading, userRegister } = useAuth()
 const labelPosition = ref('right')
 
 // 登陆业务逻辑
@@ -113,12 +116,13 @@ const loginRules = reactive({
   ]
 })
 const submitLoginForm = (formName) => {
-  ctx.$refs[formName].validate((valid) => {
+  ctx.$refs[formName].validate(async (valid) => {
     if (valid) {
-      store.dispatch('user/setUser', {
+      const params = {
         username: loginParams.username,
         password: loginParams.password
-      })
+      }
+      await userLogin(params)
     } else {
       ElMessage.error('账号或密码不符合参数要求')
     }
@@ -160,23 +164,17 @@ const submitregisterForm = (formName) => {
   ctx.$refs[formName].validate(async (valid) => {
     if (valid) {
       if (registerParams.password === registerParams.confirmPassword) {
-        const res = await register({
+        await userRegister({
           username: registerParams.username,
           password: registerParams.password
         })
-
-        if (res.code === 200) {
-          ElMessage.success('注册成功')
-        } else {
-          ElMessage.error(res.message)
-        }
+        registerForm.value.resetFields()
       } else {
         ElMessage.error('密码不一致')
       }
     } else {
       ElMessage.error('账号或密码不符合参数要求')
     }
-    registerForm.value.resetFields()
   })
 }
 </script>
@@ -206,6 +204,7 @@ const submitregisterForm = (formName) => {
 
   .bg1 {
     position: absolute;
+    z-index: 9;
     right: 0;
     top: 0;
     padding: 40px 80px;
@@ -232,16 +231,16 @@ const submitregisterForm = (formName) => {
     }
     .bg2 {
       position: absolute;
-      left: -25%;
+      left: -20%;
       top: 0;
-      width: 25%;
+      width: 20%;
       height: 50%;
       background-color: #0389f7;
       border-radius: 0 0 0 100%;
     }
     .bg3 {
       position: absolute;
-      left: 0;
+      left: 0px;
       bottom: 0;
       width: 20%;
       height: 50%;

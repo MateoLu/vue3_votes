@@ -36,37 +36,36 @@
   </el-header>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
 import { getToken } from '@/utils/storage'
 import { ElMessageBox } from 'element-plus'
 import jwtDecode from 'jwt-decode'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/hooks/auth'
 
-export default {
-  name: 'TheHeader',
-  computed: {
-    username() {
-      return jwtDecode(getToken()).sub
-    }
-  },
-  methods: {
-    goPage(address) {
-      this.$router.push(address)
-    },
-    handleCommand(command) {
-      switch (command) {
-        case 'logout':
-          ElMessageBox.confirm('确定退出登陆吗？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          })
-            .then(() => {
-              this.$store.dispatch('user/clearUser')
-            })
-            .catch(() => {})
-          break
-      }
-    }
+const router = useRouter()
+const { userLogout } = useAuth()
+
+const username = computed(() => jwtDecode(getToken()).sub)
+
+const goPage = (address) => {
+  router.push(address)
+}
+
+const handleCommand = (command) => {
+  switch (command) {
+    case 'logout':
+      ElMessageBox.confirm('确定退出登陆吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          userLogout()
+        })
+        .catch(() => {})
+      break
   }
 }
 </script>

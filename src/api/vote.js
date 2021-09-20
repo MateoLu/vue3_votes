@@ -22,7 +22,7 @@ import { requestWithToken } from '@/service'
 
 // 分页查询投票问卷接口
 export const getVotesByPage = async (pageNum) => {
-  return await requestWithToken('question/list', {
+  return await requestWithToken('question/list/currentUser', {
     data: { pageNum, pageSize: 7 }
   })
 }
