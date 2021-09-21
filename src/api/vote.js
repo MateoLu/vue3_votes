@@ -34,3 +34,21 @@ export const createVote = async (params) => {
     data: params
   })
 }
+
+// 根据投票问卷id查询问卷详情
+export const getVoteDetailById = async (id) => {
+  return await requestWithToken(`question/${id}`)
+}
+
+// 更改投票问卷接口
+export const updateVoteById = async (id, params) => {
+  return await requestWithToken(`question/${id}`, {
+    method: 'PUT',
+    data: params
+  })
+}
+
+// 删除投票问卷接口
+export const delVoteById = async (id) => {
+  return await requestWithToken(`question/${id}`, { method: 'DELETE' })
+}

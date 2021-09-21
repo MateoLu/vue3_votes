@@ -16,7 +16,13 @@
       <ul class="toolbar">
         <li class="tool-item">
           <el-tooltip effect="light" content="编辑" placement="top">
-            <el-link :underline="false" icon="el-icon-edit">编辑</el-link>
+            <el-link
+              :underline="false"
+              @click.stop="toPage(`/vote/edit/${id}`)"
+              icon="el-icon-edit"
+            >
+              编辑
+            </el-link>
           </el-tooltip>
         </li>
         <li class="tool-item">
@@ -36,13 +42,18 @@
           </el-tooltip>
         </li>
         <li class="tool-item">
-          <el-dropdown placement="bottom-start" size="mini" trigger="click">
+          <el-dropdown
+            @command="handleCommand"
+            placement="bottom-start"
+            size="mini"
+            trigger="click"
+          >
             <el-link :underline="false" icon="el-icon-more"></el-link>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>预览项目</el-dropdown-item>
-                <el-dropdown-item>暂停项目</el-dropdown-item>
-                <el-dropdown-item>删除项目</el-dropdown-item>
+                <el-dropdown-item command="review">预览项目</el-dropdown-item>
+                <el-dropdown-item command="stop">暂停项目</el-dropdown-item>
+                <el-dropdown-item command="del">删除项目</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -55,19 +66,45 @@
 <script setup>
 import { defineProps } from 'vue'
 import dayjs from 'dayjs'
+import { useRouter } from 'vue-router'
+import { useVote } from '@/hooks/vote'
 
-defineProps({
+const props = defineProps({
   status: {
-    type: Number,
-    default: 0
+    type: Number
   },
   title: {
     type: String
   },
   overDate: {
     type: String
+  },
+  id: {
+    type: String
   }
 })
+
+const router = useRouter()
+const { deleteVote } = useVote()
+
+const handleCommand = async (command) => {
+  switch (command) {
+    case 'review':
+      console.log(command)
+      break
+    case 'stop':
+      console.log(command)
+      break
+    case 'del':
+      await deleteVote(props.id)
+      break
+  }
+}
+
+// 路由跳转
+const toPage = (address) => {
+  router.push(address)
+}
 </script>
 
 <style scoped lang="less">
@@ -84,7 +121,6 @@ defineProps({
     background-color: #fff;
     border-radius: 5px;
     box-shadow: -2px 4px 5px 0 rgb(0 0 0 / 6%);
-    cursor: pointer;
     color: #484848;
     .header {
       flex: none;

@@ -24,7 +24,7 @@ const user = {
     },
     async clearUser({ commit }) {
       const res = await logout()
-      if (res.code === 200) {
+      if (res.code == 200) {
         ElNotification({
           title: '提示',
           message: '用户已退出登陆！',

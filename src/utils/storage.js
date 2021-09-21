@@ -32,3 +32,11 @@ export const setCheckList = (val) => {
 export const getCheckList = () => {
   return getItem('checkList')
 }
+
+export const setVoteDetail = (val) => {
+  setItem('currentVoteDetail', val)
+}
+
+export const getVoteDetail = () => {
+  return getItem('currentVoteDetail')
+}

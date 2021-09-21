@@ -6,7 +6,7 @@
 
 const home = () => import('@/pages/home/index.vue')
 const login = () => import('@/pages/login/index.vue')
-const createVote = () => import('@/pages/create-vote/index.vue')
+const vote = () => import('@/pages/vote/index.vue')
 const Page404 = () => import('@/components/Page404.vue')
 
 const routes = [
@@ -17,9 +17,26 @@ const routes = [
     component: home
   },
   {
-    path: '/create-vote',
-    name: 'createVote',
-    component: createVote
+    path: '/vote',
+    name: 'vote',
+    component: vote,
+    children: [
+      {
+        path: '/vote/edit/:id',
+        name: 'voteEdit',
+        component: () => import('@/pages/vote/edit.vue')
+      },
+      {
+        path: '/vote/publish/:id',
+        name: 'votePublish',
+        component: () => import('@/pages/vote/publish.vue')
+      },
+      {
+        path: '/vote/report/:id',
+        name: 'voteReport',
+        component: () => import('@/pages/vote/report.vue')
+      }
+    ]
   },
   {
     path: '/login',

@@ -1,27 +1,32 @@
 <template>
-  <div class="home-container">
+  <div class="vote-container">
     <VoteHeader />
-    <VoteMain />
+    <main class="main-wrapper">
+      <router-view />
+    </main>
   </div>
 </template>
 <script>
 import { defineComponent } from 'vue'
 import VoteHeader from './components/vote-header.vue'
-import VoteMain from './components/vote-main.vue'
 
 export default defineComponent({
   setup() {},
   components: {
-    VoteHeader,
-    VoteMain
+    VoteHeader
   }
 })
 </script>
 
 <style scoped lang="less">
-.home-container {
+.vote-container {
   width: 100vw;
   height: 100%;
   overflow: hidden;
+  .main-wrapper {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 60px);
+  }
 }
 </style>

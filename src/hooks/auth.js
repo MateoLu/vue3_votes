@@ -13,7 +13,7 @@ export function useAuth() {
     loading.value = true
     await login(formValue)
       .then(async (res) => {
-        if (res.code === 200) {
+        if (res.code == 200) {
           const token = res.data.token
           setToken(token)
           await store.dispatch('user/setUser', token)
@@ -46,7 +46,7 @@ export function useAuth() {
     loading.value = true
     try {
       const res = await register(registerForm)
-      if (res.code === 200) {
+      if (res.code == 200) {
         ElNotification({
           title: '提示',
           message: '用户注册成功！',

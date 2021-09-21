@@ -27,13 +27,14 @@
       <!-- 创建项目及项目列表 -->
       <ul class="projects-wrapper">
         <li class="project-item">
-          <div class="create-project" @click="toPage('/create-vote')">
+          <div class="create-project" @click="handleCreateVote">
             <i style="font-weight: bold" class="el-icon-plus"></i>
             创建投票
           </div>
         </li>
         <VoteItem
           v-for="item in votesByStatus"
+          :id="item.id"
           :key="item.id"
           :title="item.name"
           :status="item.status"
@@ -46,7 +47,7 @@
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
           :page-size="7"
-          :total="pager.total"
+          :total="parseInt(pager.total)"
         ></el-pagination>
       </div>
       <div class="foot"></div>
@@ -61,6 +62,7 @@ import VoteItem from '@/components/VoteItem.vue'
 import { useRouter } from 'vue-router'
 import { useVote } from '@/hooks/vote'
 import store from '@/store'
+import { ElLoading } from 'element-plus'
 
 export default defineComponent({
   components: {
@@ -68,12 +70,13 @@ export default defineComponent({
     VoteItem
   },
   setup() {
-    const { setVotes, votes, pager } = useVote()
+    const { setVotes, votes, pager, makeVote } = useVote()
 
     onMounted(async () => {
+      const elLoading = ElLoading.service({ fullscreen: true, lock: true })
       await setVotes(1)
       await store.dispatch('getCheckList')
-      console.log(votes.value)
+      elLoading.close()
     })
 
     const router = useRouter()
@@ -111,13 +114,28 @@ export default defineComponent({
 
     // 改变当前页
     const handleCurrentChange = async (val) => {
-      console.log(`当前页: ${val}`)
+      const elLoading = ElLoading.service({ fullscreen: true, lock: true })
+
       await setVotes(val)
+      elLoading.close()
+    }
+
+    // 创建投票问卷
+    const handleCreateVote = async () => {
+      const params = {
+        checkId: 3,
+        expirationDate: new Date().getTime(),
+        name: '投票标题',
+        status: 0,
+        optionList: [{ name: '选项1' }, { name: '选项2' }]
+      }
+      await makeVote(params)
     }
 
     return {
       toPage,
       handleCurrentChange,
+      handleCreateVote,
       votesByStatus,
       options,
       value,

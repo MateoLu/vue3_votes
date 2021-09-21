@@ -8,8 +8,10 @@
           if (e.target.value === '') {
             e.target.value = '选项'
             $emit('update:text', '选项')
+            $emit('change-text', { id, text: e.target.value })
           } else {
             $emit('update:text', e.target.value)
+            $emit('changeText', { id, text: e.target.value })
           }
         }
       "

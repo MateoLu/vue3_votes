@@ -22,7 +22,7 @@ export default new Vuex.Store({
     async getCheckList({ commit }) {
       try {
         const res = await getCheckList()
-        if (res.code === 200) {
+        if (res.code == 200) {
           setCheckList(res.data)
           commit('setCheckList', res.data)
         }
