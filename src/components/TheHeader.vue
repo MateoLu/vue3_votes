@@ -3,7 +3,7 @@
     <div class="header-wrapper">
       <!-- 头像 -->
       <div class="logo" @click="goPage('/home')">
-        <img src="@/assets/images/vote.png" width="55" alt="" />
+        <img src="@/assets/images/vote.png" width="35" alt="" />
         &nbsp;甄布绰投票系统
       </div>
       <div class="user-info">
@@ -86,6 +86,11 @@ const handleCommand = (command) => {
       display: flex;
       align-items: center;
       cursor: pointer;
+      color: #484848;
+      user-select: none;
+    }
+    .user-info {
+      color: #484848;
     }
   }
 }

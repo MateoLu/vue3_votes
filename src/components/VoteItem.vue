@@ -31,6 +31,7 @@
               :disabled="status == 1"
               :underline="false"
               icon="el-icon-s-promotion"
+              @click="toPage(`/vote/publish/${id}`)"
             >
               发布
             </el-link>
@@ -38,7 +39,13 @@
         </li>
         <li class="tool-item">
           <el-tooltip effect="light" content="数据" placement="top">
-            <el-link :underline="false" icon="el-icon-s-data">数据</el-link>
+            <el-link
+              @click="toPage(`/vote/report/${id}`)"
+              :underline="false"
+              icon="el-icon-s-data"
+            >
+              数据
+            </el-link>
           </el-tooltip>
         </li>
         <li class="tool-item">

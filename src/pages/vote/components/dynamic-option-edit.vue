@@ -35,18 +35,23 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, computed } from 'vue'
 const isShow = ref(false)
 const conRef = ref(undefined)
 
-defineProps({
+const props = defineProps({
   text: {
     type: String
   },
   id: {
     type: String
+  },
+  isMultiple: {
+    type: Number
   }
 })
+
+const isMultiple = computed(() => (props.isMultiple === 0 ? '50%' : '20%'))
 
 const isOver = ref(false)
 const btnOver = () => {
@@ -99,7 +104,7 @@ const handleFocus = () => {
     top: 4px;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
+    border-radius: v-bind(isMultiple);
     border: 1px solid #cbcbcb;
     background-color: #fff;
   }

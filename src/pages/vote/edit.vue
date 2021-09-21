@@ -37,11 +37,12 @@
           <input v-model="putValue.name" class="input-dynamic input-question" />
         </div>
         <div class="question-choose">
-          <DynamicRadioEdit
+          <DynamicOptionEdit
             v-for="item in optionsData"
             v-model:text="item.name"
             :key="item.id"
             :id="item.id"
+            :isMultiple="putValue.isMultiple"
             @remove="removeDynamicInput"
             @changeText="handleChangeText"
           />
@@ -54,7 +55,12 @@
       </div>
     </div>
     <!-- 发布并分享按钮 -->
-    <el-button type="primary" @click="handleSubmit" class="share">
+    <el-button
+      icon="el-icon-s-promotion"
+      type="primary"
+      @click="handleSubmit"
+      class="share"
+    >
       发布并分享
     </el-button>
   </section>
@@ -62,12 +68,13 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import DynamicRadioEdit from './components/dynamic-radio-edit.vue'
+import DynamicOptionEdit from './components/dynamic-option-edit.vue'
 import { ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import { useStore } from 'vuex'
 import { useVote } from '@/hooks/vote'
 import { useRoute } from 'vue-router'
 import { debunce } from '@/utils'
+import router from '@/router'
 
 const store = useStore()
 const route = useRoute()
@@ -156,12 +163,14 @@ const handleAddOption = async () => {
 
 // 提交问题表单
 const handleSubmit = () => {
-  ElMessageBox.confirm('确认是否发布此投票?', '提示', {
+  ElMessageBox.confirm('确认是否发布此投票并分享?', '发布确认', {
     confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'info'
+    cancelButtonText: '取消'
   })
-    .then(async () => {})
+    .then(async () => {
+      await updateVote(voteId.value, { ...putValue, status: 1 })
+      router.replace(`/vote/publish/${voteId.value}`)
+    })
     .catch(() => {
       ElMessage({
         type: 'info',

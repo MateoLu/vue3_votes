@@ -35,28 +35,47 @@
     </div>
     <!-- 中间编辑项目 -->
     <div class="center">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>编辑项目</el-breadcrumb-item>
-        <el-breadcrumb-item>发布项目</el-breadcrumb-item>
-      </el-breadcrumb>
+      <el-menu
+        :default-active="route.fullPath"
+        class="el-menu-demo"
+        mode="horizontal"
+        router
+      >
+        <el-menu-item :index="`/vote/edit/${curVoteId}`">编辑项目</el-menu-item>
+        <i class="el-icon-arrow-right"></i>
+        <el-menu-item :index="`/vote/publish/${curVoteId}`">
+          发布项目
+        </el-menu-item>
+        <i class="el-icon-arrow-right"></i>
+        <el-menu-item :index="`/vote/report/${curVoteId}`">
+          数据报表
+        </el-menu-item>
+      </el-menu>
     </div>
     <!-- 右边发布按钮 -->
     <div class="right">
-      <el-button type="primary">预览项目</el-button>
+      <el-button plain icon="el-icon-view" size="medium">预览</el-button>
     </div>
   </div>
 </template>
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { RefreshRight, CircleCheck } from '@element-plus/icons'
 
 const router = useRouter()
+const route = useRoute()
 const store = useStore()
 const isFirst = ref(true)
 
+console.log(route)
+
 const loading = computed(() => store.state.vote.loading)
+const curVoteId = computed(
+  () => store.state.vote.currentVoteDetail.optionList[0].questionId
+)
+console.log(curVoteId.value)
 
 watch(loading, (n) => {
   if (isFirst.value) {
@@ -82,12 +101,10 @@ const curQuestion = computed(() => store.state.vote.currentVoteDetail.name)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 100px;
   .left {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 20px;
     .edit-wrapper {
       flex: auto;
       display: flex;
@@ -112,12 +129,20 @@ const curQuestion = computed(() => store.state.vote.currentVoteDetail.name)
     }
   }
   .center {
-    flex: none;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin-left: 10%;
+    .el-menu-demo {
+      width: 400px;
+      display: flex;
+      align-items: center;
+    }
   }
   .right {
-    flex: auto;
+    flex: 1;
     text-align: right;
-    margin-right: 50px;
+    margin-right: 30px;
   }
 }
 </style>
