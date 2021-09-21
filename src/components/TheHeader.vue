@@ -3,7 +3,7 @@
     <div class="header-wrapper">
       <!-- 头像 -->
       <div class="logo" @click="goPage('/home')">
-        <img src="@/assets/images/zbc_logo.jpg" width="30" alt="" />
+        <img src="@/assets/images/vote.png" width="55" alt="" />
         &nbsp;甄布绰投票系统
       </div>
       <div class="user-info">
