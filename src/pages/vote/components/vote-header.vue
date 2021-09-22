@@ -54,12 +54,67 @@
     </div>
     <!-- 右边发布按钮 -->
     <div class="right">
-      <el-button plain icon="el-icon-view" size="medium">预览</el-button>
+      <el-button
+        plain
+        icon="el-icon-view"
+        size="medium"
+        @click="drawer = true"
+        v-model="direction"
+      >
+        预览
+      </el-button>
     </div>
   </div>
+
+  <el-drawer
+    v-model="drawer"
+    :direction="direction"
+    size="100%"
+    :with-header="false"
+  >
+    <!-- 预览头部 -->
+    <div class="drawer-container">
+      <div class="drawer-header">
+        <div class="drawer-left">
+          <i class="drawer-icon"></i>
+          <span class="drawer-span">退出预览</span>
+        </div>
+        <div class="drawer-center">
+          <span class="drawer-tip">提示：当前为预览页面，答案不被记录。</span>
+        </div>
+        <div class="drawer-right">
+          <el-button type="primary">发布并分享</el-button>
+        </div>
+      </div>
+      <div class="drawer-main">
+        <div class="main-box">
+          <div class="main-title">
+            {{ voteTitle }}
+          </div>
+          <div class="main-welcome">
+            欢迎参与本次投票，现在我们就马上开始吧！
+          </div>
+          <div class="main-blueWire"></div>
+          <div class="question-box">
+            <div class="question-id">{{ voteTitle }}</div>
+          </div>
+          <div class="question-choose">
+            <div class="radio-container">
+              <div class="radio-select">
+                <el-radio :label="0">{{ voteSelect }}</el-radio>
+                <el-radio :label="1">
+                  {{ voteValue.name }}
+                </el-radio>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </el-drawer>
 </template>
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { RefreshRight, CircleCheck } from '@element-plus/icons'
@@ -72,9 +127,7 @@ const isFirst = ref(true)
 console.log(route)
 
 const loading = computed(() => store.state.vote.loading)
-const curVoteId = computed(
-  () => store.state.vote.currentVoteDetail.optionList[0].questionId
-)
+const curVoteId = computed(() => route.params.id)
 console.log(curVoteId.value)
 
 watch(loading, (n) => {
@@ -88,6 +141,27 @@ const goPage = (address) => {
 }
 
 const curQuestion = computed(() => store.state.vote.currentVoteDetail.name)
+
+const drawer = ref(false)
+const direction = ref('ttb')
+// 预览投票
+const voteTitle = computed(() => store.state.vote.currentVoteDetail.name)
+
+const voteValue = reactive({
+  id: '',
+  name: ''
+})
+
+const voteSelect = computed(() =>
+  store.state.vote.currentVoteDetail.optionList.forEach((key, index) => {
+    console.log(key.name)
+    console.log(index)
+    for (let index = 0; index <= key.name.length; index++) {
+      voteValue.name = key.name
+      console.log(voteValue.name)
+    }
+  })
+)
 </script>
 
 <style scoped lang="less">
@@ -143,6 +217,106 @@ const curQuestion = computed(() => store.state.vote.currentVoteDetail.name)
     flex: 1;
     text-align: right;
     margin-right: 30px;
+  }
+}
+
+.drawer-container {
+  background-color: #f5f5f5;
+  .drawer-header {
+    height: 50px;
+    vertical-align: bottom;
+    position: absolute;
+    background: #efefef;
+    width: 100%;
+    // z-index: 99;
+    .drawer-left {
+      position: absolute;
+      left: 36px;
+      top: 50%;
+      padding: 2px 5px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      .drawer-icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 11px;
+        background: url(https://s1.wenjuan.com/static/images/icon_edit_tools.png)
+          no-repeat;
+        // background: url(../../../assets/images/vote_header_exit.svg)
+        background-position: -360px -168px;
+        background-size: 520px auto;
+      }
+      .drawer-span {
+        font-size: 12px;
+        color: #484848;
+        text-align: center;
+        vertical-align: middle;
+      }
+    }
+    .drawer-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      .drawer-tip {
+        font-size: 14px;
+        color: #aaa;
+      }
+    }
+    .drawer-right {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .drawer-main {
+    padding: 145px 557px 145px;
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f5;
+    .main-box {
+      // height: 675px;
+      background-color: #ffffff;
+      clear: both;
+      overflow: hidden;
+      padding: 10px 40px 66px;
+    }
+    .main-title {
+      font-size: 18px;
+      margin-top: 38px;
+    }
+    .main-welcome {
+      margin-top: 26px;
+      font-size: 15px;
+    }
+    .main-blueWire {
+      background-color: #53a4f4 !important;
+      float: left;
+      width: 100%;
+      height: 3px;
+      margin-top: 26px;
+    }
+    .question-box {
+      width: 734px;
+      margin-top: 30px;
+      padding-left: 15px;
+      display: -webkit-inline-box;
+    }
+    .question-choose {
+      .radio-container {
+        .radio-select {
+          display: inline-block;
+          display: inline;
+          zoom: 1;
+          vertical-align: top;
+          line-height: 17px;
+        }
+      }
+    }
   }
 }
 </style>
