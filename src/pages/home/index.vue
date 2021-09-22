@@ -46,6 +46,7 @@
           background
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
+          default-current-page="1"
           :page-size="7"
           :total="parseInt(pager.total)"
         ></el-pagination>
@@ -115,7 +116,6 @@ export default defineComponent({
     // 改变当前页
     const handleCurrentChange = async (val) => {
       const elLoading = ElLoading.service({ fullscreen: true, lock: true })
-
       await setVotes(val)
       elLoading.close()
     }

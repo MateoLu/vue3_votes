@@ -10,7 +10,7 @@ const vote = () => import('@/pages/vote/index.vue')
 const Page404 = () => import('@/components/Page404.vue')
 
 const routes = [
-  { path: '/', redirect: '/login' },
+  { path: '/', redirect: '/home' },
   {
     path: '/home',
     name: 'home',
@@ -24,7 +24,10 @@ const routes = [
       {
         path: '/vote/edit/:id',
         name: 'voteEdit',
-        component: () => import('@/pages/vote/edit.vue')
+        component: () => import('@/pages/vote/edit.vue'),
+        meta: {
+          isShow: true
+        }
       },
       {
         path: '/vote/publish/:id',
@@ -39,8 +42,13 @@ const routes = [
     ]
   },
   {
-    path: '/login',
-    name: 'login',
+    path: '/survey/:id',
+    name: 'survey',
+    component: () => import('@/pages/survey/index.vue')
+  },
+  {
+    path: '/auth',
+    name: 'auth',
     component: login
   },
   {

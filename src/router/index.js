@@ -13,17 +13,19 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
   const token = await getToken()
-  if (to.path === '/login') {
+  if (to.path === '/auth') {
     if (token) {
       next('/home')
     } else {
       next()
     }
+  } else if (to.name === 'survey') {
+    next()
   } else {
     if (token == null || token === '') {
-      next('/login')
+      next('/auth')
     } else {
-      if (to.path === '/login') {
+      if (to.path === '/auth') {
         next('/home')
       } else {
         next()

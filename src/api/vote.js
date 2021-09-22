@@ -18,7 +18,7 @@
 }
 */
 
-import { requestWithToken } from '@/service'
+import { $GET, http, requestWithToken } from '@/service'
 
 // 分页查询投票问卷接口
 export const getVotesByPage = async (pageNum) => {
@@ -51,4 +51,15 @@ export const updateVoteById = async (id, params) => {
 // 删除投票问卷接口
 export const delVoteById = async (id) => {
   return await requestWithToken(`question/${id}`, { method: 'DELETE' })
+}
+
+const api = import.meta.env.VITE_APP_SERVER_API
+// 无需token可查询问卷的统计数据和投票详情, 传入questionId
+export const getVoteDetailStatistic = async (id) => {
+  return await $GET(`${api}/question/detail/${id}`)
+}
+
+// 投票接口
+export const postVote = async (params) => {
+  return http('record/create', { method: 'POST', data: params })
 }

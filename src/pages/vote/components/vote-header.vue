@@ -14,7 +14,7 @@
         <div class="question-title">
           {{ curQuestion }}
         </div>
-        <div class="update-info">
+        <div class="update-info" v-if="$route.meta.isShow">
           <span v-if="isFirst">项目将自动保存</span>
           <span v-else>
             <span v-show="loading">
@@ -41,7 +41,7 @@
         mode="horizontal"
         router
       >
-        <el-menu-item :index="`/vote/edit/${curVoteId}`">编辑项目</el-menu-item>
+        <el-menu-item @click="toEdit">编辑项目</el-menu-item>
         <i class="el-icon-arrow-right"></i>
         <el-menu-item :index="`/vote/publish/${curVoteId}`">
           发布项目
@@ -118,17 +118,17 @@ import { computed, ref, watch, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { RefreshRight, CircleCheck } from '@element-plus/icons'
+import { useVote } from '@/hooks/vote'
+import { ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
 const store = useStore()
 const isFirst = ref(true)
-
-console.log(route)
+const { curVoteDetail } = useVote()
 
 const loading = computed(() => store.state.vote.loading)
 const curVoteId = computed(() => route.params.id)
-console.log(curVoteId.value)
 
 watch(loading, (n) => {
   if (isFirst.value) {
@@ -138,6 +138,25 @@ watch(loading, (n) => {
 
 const goPage = (address) => {
   router.push(address)
+}
+
+const toEdit = () => {
+  if (curVoteDetail.value.status != 1) {
+    goPage(`/vote/edit/${curVoteId.value}`)
+  } else {
+    ElMessageBox.confirm(
+      '在您修改问卷时，问卷会暂停收集，您需要在修改完后再次发布问卷才可继续进行收集。',
+      '修改提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }
+    )
+      .then(() => {
+        goPage(`/vote/edit/${curVoteId.value}`)
+      })
+      .catch(() => {})
+  }
 }
 
 const curQuestion = computed(() => store.state.vote.currentVoteDetail.name)
@@ -206,7 +225,7 @@ const voteSelect = computed(() =>
     flex: 1;
     display: flex;
     justify-content: center;
-    margin-left: 10%;
+    margin-left: 5%;
     .el-menu-demo {
       width: 400px;
       display: flex;

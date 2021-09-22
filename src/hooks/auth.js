@@ -9,6 +9,7 @@ export function useAuth() {
   const router = useRouter()
   const loading = ref(false)
 
+  // 用户登陆
   const userLogin = async (formValue) => {
     loading.value = true
     await login(formValue)
@@ -38,10 +39,12 @@ export function useAuth() {
       })
   }
 
+  // 用户退出
   const userLogout = () => {
     store.dispatch('user/clearUser')
   }
 
+  // 用户注册
   const userRegister = async (registerForm) => {
     loading.value = true
     try {

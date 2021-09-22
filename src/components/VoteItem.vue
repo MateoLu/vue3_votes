@@ -18,7 +18,7 @@
           <el-tooltip effect="light" content="编辑" placement="top">
             <el-link
               :underline="false"
-              @click.stop="toPage(`/vote/edit/${id}`)"
+              @click.stop="toEditPage"
               icon="el-icon-edit"
             >
               编辑
@@ -28,7 +28,6 @@
         <li class="tool-item">
           <el-tooltip effect="light" content="发布" placement="top">
             <el-link
-              :disabled="status == 1"
               :underline="false"
               icon="el-icon-s-promotion"
               @click="toPage(`/vote/publish/${id}`)"
@@ -75,6 +74,7 @@ import { defineProps } from 'vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import { useVote } from '@/hooks/vote'
+import { ElMessageBox } from 'element-plus'
 
 const props = defineProps({
   status: {
@@ -104,6 +104,7 @@ const handleCommand = async (command) => {
       break
     case 'del':
       await deleteVote(props.id)
+      location.reload()
       break
   }
 }
@@ -111,6 +112,25 @@ const handleCommand = async (command) => {
 // 路由跳转
 const toPage = (address) => {
   router.push(address)
+}
+
+const toEditPage = () => {
+  if (props.status != 1) {
+    router.push(`/vote/edit/${props.id}`)
+  } else {
+    ElMessageBox.confirm(
+      '在您修改投票时，投票会暂停收集数据，您需要在修改完后再次发布投票才可继续进行收集数据。',
+      '修改提示',
+      {
+        confirmButtonText: '暂停发布',
+        cancelButtonText: '取消'
+      }
+    )
+      .then(async () => {
+        router.push(`/vote/edit/${props.id}`)
+      })
+      .catch(() => {})
+  }
 }
 </script>
 
