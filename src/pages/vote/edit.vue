@@ -86,19 +86,16 @@ const {
   updateVoteForUptOption
 } = useVote()
 
-const putValue = reactive({
-  checkId: 1,
-  expirationDate: '',
-  isMultiple: 0,
-  name: '',
-  status: 0
-})
+const putValue = reactive({})
 
 const optionsData = ref([])
 
+// 当前投票 id
 const voteId = computed(() => BigInt(route.params.id))
+
+// 挂载时获取对应投票详情数据
 onMounted(async () => {
-  const elLoading = ElLoading.service({ fullscreen: true })
+  const elLoading = ElLoading.service({ fullscreen: true, lock: true })
   const res = await getVoteDetail(voteId.value)
   Object.keys(res).forEach((key) => {
     if (key == 'checkId') {
@@ -115,14 +112,10 @@ onMounted(async () => {
   elLoading.close()
 })
 
-const isFirst = ref(true)
+// 监听 putValue 的变化，自动保存功能
 watch(
   putValue,
   debunce(async (n, o) => {
-    if (isFirst.value) {
-      isFirst.value = false
-      return
-    }
     if (
       new Date(n.expirationDate).getTime() >
       new Date(defaultTime.value).getTime()
@@ -137,18 +130,23 @@ watch(
   }, 500)
 )
 
+// 验证方式列表
 const checkList = computed(() => store.state.checkList)
 
 const defaultTime = ref(new Date())
 
+// 更改问题名字
 const handleChangeText = debunce(async ({ id, text }) => {
   await updateVoteForUptOption(id, text)
 }, 500)
 
+// 删除问题选项
 const removeDynamicInput = async (id) => {
   optionsData.value = optionsData.value.filter((item) => item.id !== id)
   await updateVoteForDelOption(id)
 }
+
+// 给问题添加选项
 const handleAddOption = async () => {
   const data = await updateVoteForAddOption({
     questionId: voteId.value + '',
@@ -232,7 +230,7 @@ const handleSubmit = () => {
   padding: 0 10px;
   margin-bottom: 10px;
   width: 100%;
-  height: 30px;
+  height: 45px;
   background-color: transparent;
   border: 1px solid #fff;
   outline: none;

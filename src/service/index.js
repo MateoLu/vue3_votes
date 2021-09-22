@@ -1,7 +1,7 @@
 import { getToken } from '@/utils/storage'
 import qs from 'qs'
 
-const apiUrl = '/api'
+const apiUrl = import.meta.env.VITE_APP_SERVER_API
 
 // 该函数是请求后端主接口的，有些请求需要token，这里可以传入
 export const http = async (

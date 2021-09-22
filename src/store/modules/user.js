@@ -32,7 +32,7 @@ const user = {
           duration: 2000
         })
         await commit('clearUser')
-        router.replace('/login')
+        router.replace('/auth')
       } else {
         ElNotification({
           title: '提示',

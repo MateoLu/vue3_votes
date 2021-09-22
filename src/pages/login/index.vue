@@ -32,7 +32,7 @@
                 <el-button
                   :loading="loading"
                   type="primary"
-                  @click="submitLoginForm('loginForm')"
+                  @click="submitLoginForm"
                   class="btns"
                 >
                   登 录
@@ -70,7 +70,7 @@
                 <el-button
                   :loading="loading"
                   type="success"
-                  @click="submitregisterForm('registerForm')"
+                  @click="submitregisterForm"
                   class="btns"
                 >
                   注 册
@@ -87,13 +87,11 @@
   </div>
 </template>
 <script setup>
-// import { useStore } from 'vuex'
-import { getCurrentInstance, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useAuth } from '@/hooks/auth'
 
-const { ctx } = getCurrentInstance()
-// const store = useStore()
+// const { ctx } = getCurrentInstance()
 const { userLogin, loading, userRegister } = useAuth()
 const labelPosition = ref('right')
 
@@ -115,8 +113,8 @@ const loginRules = reactive({
     }
   ]
 })
-const submitLoginForm = (formName) => {
-  ctx.$refs[formName].validate(async (valid) => {
+const submitLoginForm = () => {
+  loginForm.value.validate(async (valid) => {
     if (valid) {
       const params = {
         username: loginParams.username,
@@ -160,8 +158,8 @@ const registerRules = reactive({
     }
   ]
 })
-const submitregisterForm = (formName) => {
-  ctx.$refs[formName].validate(async (valid) => {
+const submitregisterForm = () => {
+  registerForm.value.validate(async (valid) => {
     if (valid) {
       if (registerParams.password === registerParams.confirmPassword) {
         await userRegister({
