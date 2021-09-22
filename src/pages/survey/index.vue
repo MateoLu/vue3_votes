@@ -14,11 +14,7 @@
           subTitle="感谢您的帮助与支持，点击继续投票即可再次进行投票"
         >
           <template #extra>
-            <el-button
-              @click="() => (isSuccess = false)"
-              type="primary"
-              size="medium"
-            >
+            <el-button @click="handleAgainSubmit" type="primary" size="medium">
               继续投票
             </el-button>
           </template>
@@ -205,6 +201,11 @@ watch(checkList, (n) => {
     questionId: voteId
   }))
 })
+
+const handleAgainSubmit = () => {
+  isSuccess.value = false
+  location.reload()
+}
 
 // 表单验证
 const submitForm = () => {
