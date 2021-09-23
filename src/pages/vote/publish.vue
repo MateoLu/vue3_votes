@@ -171,6 +171,7 @@ const handlePublish = async () => {
         display: flex;
         width: 70%;
         height: 35px;
+
         .link-address {
           flex: auto;
           border-radius: 2px 0 0 2px;
@@ -181,6 +182,9 @@ const handlePublish = async () => {
           padding: 0 10px;
           color: #484848;
           background-color: #f7f9fa;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         .copy {
           flex: none;
