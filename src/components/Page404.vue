@@ -2,72 +2,61 @@
   <div class="falsePage_container">
     <img src="@/assets/images/404.png" alt="" />
     <div class="content">
-      <h1>抱歉,你访问的页面地址有误，或者该页面不存在</h1>
-      <p>请检查输入的网址是否正确，或者联系客服：</p>
-      <p class="team">© GGS · 甄步绰小组</p>
-      <p>
-        <span>{{ countDown }}</span>
-        &nbsp;秒之后自动跳转回上一页
+      <p class="desc">抱歉，你访问的页面地址有误，或者该页面不存在</p>
+      <p class="intervel">
+        页面将在
+        <span style="color: #409eff">{{ secounds }}</span>
+        秒后返回原来的页面
       </p>
+      <p class="team">&copy; GGS · 甄步绰小组</p>
     </div>
   </div>
 </template>
 
 <script>
-// import { defineComponent } from 'vue'
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   data() {
     return {
-      time: null,
-      countDown: null
+      timer: null,
+      secounds: 4
     }
   },
-  created() {
-    this.count()
+  mounted() {
+    this.timer = setInterval(() => {
+      this.secounds--
+      if (this.secounds === 0) {
+        this.$router.back()
+      }
+    }, 1000)
   },
-  methods: {
-    count() {
-      // 倒计时的时间count
-      const count = 3
-      this.countDown = count
-      this.timers = setInterval(() => {
-        if (this.countDown > 0) {
-          this.countDown--
-        } else {
-          clearInterval(this.timers)
-          this.$router.back()
-        }
-      }, 1000)
-    }
+  unmounted() {
+    clearInterval(this.timer)
   }
-}
+})
 </script>
 
 <style lang="less" scoped>
 .falsePage_container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   img {
-    float: left;
-    width: 67%;
-    height: 67%;
+    width: 50%;
+    height: 50%;
   }
   .content {
-    width: 600px;
-    height: 400px;
-    float: left;
-    margin-top: 300px;
-    h1 {
-      color: orange;
+    .desc {
+      font-size: 24px;
+      color: #484848;
     }
-    p {
-      font-size: 20px;
+    .intervel {
+      text-align: center;
+      color: #484848;
     }
     .team {
-      font-size: 15px;
-      font-weight: 800;
-      color: #ccc;
-    }
-    span {
-      color: orange;
+      text-align: center;
+      color: #d0d0d0;
     }
   }
 }

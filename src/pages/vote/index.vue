@@ -2,9 +2,11 @@
   <div class="vote-container">
     <VoteHeader />
     <section class="main-wrapper">
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </section>
   </div>
 </template>

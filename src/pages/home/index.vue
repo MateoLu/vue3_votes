@@ -16,7 +16,7 @@
           </el-select>
         </div>
         <div class="search">
-          <el-input size="mini" placeholder="投票项目搜索">
+          <el-input v-model="search" size="mini" placeholder="投票项目搜索">
             <template #suffix>
               <i class="el-icon-search el-input__icon"></i>
             </template>
@@ -102,11 +102,24 @@ export default defineComponent({
         label: '已过期'
       }
     ])
-    const votesByStatus = computed(() =>
-      value.value === 3
-        ? votes.value
-        : votes.value.filter((item) => item.status === value.value)
-    )
+    const search = ref('')
+    const votesByStatus = computed(() => {
+      if (value.value === 3) {
+        return votes.value.filter(
+          (data) =>
+            !search.value ||
+            data.name.toLowerCase().includes(search.value.toLowerCase())
+        )
+      } else {
+        return votes.value
+          .filter((item) => item.status === value.value)
+          .filter(
+            (data) =>
+              !search.value ||
+              data.name.toLowerCase().includes(search.value.toLowerCase())
+          )
+      }
+    })
 
     // 路由跳转
     const toPage = (address) => {
@@ -139,7 +152,8 @@ export default defineComponent({
       votesByStatus,
       options,
       value,
-      pager
+      pager,
+      search
     }
   }
 })

@@ -93,7 +93,6 @@ onMounted(async () => {
     const res = await getVoteDetailStatistic(route.params.id)
     if (res.code === 200) {
       voteDetail.value = res.data
-      console.log(res.data)
       const statisticData = res.data.optionVOList.map((item) => ({
         value: item.recordCount,
         name: item.name
