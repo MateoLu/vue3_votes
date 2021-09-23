@@ -5,7 +5,12 @@
         description="该项目暂无数据，点击下方按钮开始收集吧"
         style="height: 100%"
       >
-        <el-button type="primary">分享</el-button>
+        <el-button
+          @click="$router.replace(`/vote/publish/${voteDetail.id}`)"
+          type="primary"
+        >
+          分享
+        </el-button>
       </el-empty>
     </div>
     <div v-else-if="voteDetail.recordTotalCount !== 0" class="container">
