@@ -52,12 +52,14 @@
             @command="handleCommand"
             placement="bottom-start"
             size="mini"
-            trigger="click"
+            trigger="hover"
           >
             <el-link :underline="false" icon="el-icon-more"></el-link>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="stop">暂停项目</el-dropdown-item>
+                <el-dropdown-item :disabled="status != 1" command="stop">
+                  暂停项目
+                </el-dropdown-item>
                 <el-dropdown-item command="del">删除项目</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -96,14 +98,27 @@ const { deleteVote, getVoteDetail, updateVote } = useVote()
 const handleCommand = async (command) => {
   switch (command) {
     case 'stop':
-      // eslint-disable-next-line no-case-declarations
-      const res = await getVoteDetail(props.id)
-      await updateVote(props.id, { ...res, status: 0 })
-      location.reload()
+      ElMessageBox.confirm('确定要暂停该项目吗？', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      })
+        .then(async () => {
+          const res = await getVoteDetail(props.id)
+          await updateVote(props.id, { ...res, status: 0 })
+          location.reload()
+        })
+        .catch(() => {})
       break
     case 'del':
-      await deleteVote(props.id)
-      location.reload()
+      ElMessageBox.confirm('确定要删除该项目吗？', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      })
+        .then(async () => {
+          await deleteVote(props.id)
+          location.reload()
+        })
+        .catch(() => {})
       break
   }
 }

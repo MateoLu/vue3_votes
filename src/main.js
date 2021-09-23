@@ -10,6 +10,10 @@ const app = createApp(App)
 // 设置全局统一属性
 app.config.globalProperties.$ELEMENT = { size: 'small', zIndex: 3000 }
 
+// elementPlus(App);
+app.use(store).use(router)
+app.mount('#app')
+
 // 自定义指令 v-copy
 app.directive('copy', {
   beforeMount(el, binding) {
@@ -46,7 +50,3 @@ app.directive('copy', {
     el.removeEventListener('click', () => {})
   }
 })
-
-// elementPlus(App);
-app.use(store).use(router)
-app.mount('#app')
