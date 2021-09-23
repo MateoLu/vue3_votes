@@ -157,7 +157,7 @@ const handlePublish = async () => {
     }
 
     .published {
-      width: 60%;
+      width: 1118px;
       padding: 20px 20px 50px 20px;
       margin: auto;
       background-color: #fff;
@@ -169,7 +169,7 @@ const handlePublish = async () => {
       }
       .share-input {
         display: flex;
-        // width: 450px;
+        width: 70%;
         height: 35px;
         .link-address {
           flex: auto;
