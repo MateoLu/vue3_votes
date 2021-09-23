@@ -1,9 +1,11 @@
 <template>
   <div class="vote-container">
     <VoteHeader />
-    <main class="main-wrapper">
-      <router-view />
-    </main>
+    <section class="main-wrapper">
+      <keep-alive>
+        <router-view />
+      </keep-alive>
+    </section>
   </div>
 </template>
 <script>
@@ -24,7 +26,6 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
   .main-wrapper {
-    display: flex;
     width: 100%;
     height: calc(100% - 60px);
   }

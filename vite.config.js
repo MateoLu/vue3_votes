@@ -38,5 +38,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  }
+  },
+  build: {
+    outDir: 'zbc-vote'
+  },
+  base: 'zbc-vote'
 })

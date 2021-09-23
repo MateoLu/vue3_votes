@@ -60,13 +60,19 @@
         size="medium"
         @click="drawer = true"
         v-model="direction"
+        v-if="$route.meta.isPreview"
       >
         预览
       </el-button>
     </div>
   </div>
 
-  <el-drawer v-model="drawer" direction="ttb" size="100%" :with-header="false">
+  <el-drawer
+    v-model="drawer"
+    :direction="direction"
+    size="100%"
+    :with-header="false"
+  >
     <!-- 预览头部 -->
     <div class="drawer-container">
       <div class="drawer-header">
@@ -125,16 +131,12 @@
   </el-drawer>
 </template>
 <script setup>
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { RefreshRight, CircleCheck } from '@element-plus/icons'
 import { useVote } from '@/hooks/vote'
 import { ElMessageBox, ElLoading, ElNotification } from 'element-plus'
-
-onMounted(() => {
-  console.log(curVoteDetail.value)
-})
 
 const router = useRouter()
 const route = useRoute()
@@ -178,6 +180,7 @@ const curQuestion = computed(() => store.state.vote.currentVoteDetail.name)
 
 // 抽屉预览逻辑
 const drawer = ref(false)
+const direction = ref('ttb')
 const voteTitle = computed(() => store.state.vote.currentVoteDetail.name)
 const tip = computed(() =>
   curVoteDetail.value.isMultiple === 0

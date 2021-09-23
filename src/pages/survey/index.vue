@@ -1,5 +1,12 @@
 <template>
   <div class="survey-wrapper">
+    <div class="container" v-if="iSError">
+      <!-- <el-result
+        icon="error"
+        title="抱歉，没有该问卷地址，请输入正确的地址！"
+      ></el-result> -->
+      <Page404 />
+    </div>
     <div class="container" v-if="detail.status == 2">
       <el-result icon="warning" title="抱歉，该投票问卷已过期！"></el-result>
     </div>
@@ -93,6 +100,7 @@ import { useRoute } from 'vue-router'
 import { getVoteDetailStatistic, postVote } from '@/api/vote'
 import { ElLoading, ElMessage } from 'element-plus'
 import { debunce } from '@/utils'
+import Page404 from '@/components/Page404.vue'
 
 const route = useRoute()
 const voteId = window.atob(route.params.id)
@@ -109,6 +117,7 @@ const checkForm = reactive({
 })
 const checkValidateForm = ref(null)
 const isSuccess = ref(false)
+const iSError = ref(false)
 
 onMounted(async () => {
   const elLoading = ElLoading.service({
@@ -122,6 +131,8 @@ onMounted(async () => {
       console.log(res.data)
       detail.value = res.data
       document.title = detail.value.name
+    } else {
+      iSError.value = true
     }
   } catch (err) {
     console.log(err)

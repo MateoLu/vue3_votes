@@ -1,69 +1,74 @@
 <template>
-  <aside class="el-aside">
-    <!-- 选项 -->
-    <div>
-      <h4>投票类型</h4>
-      <el-radio-group v-model="putValue.isMultiple" size="mini">
-        <el-radio :label="0" border>单选</el-radio>
-        <el-radio :label="1" border>多选</el-radio>
-      </el-radio-group>
-    </div>
-    <div>
-      <h4>投票过期时间</h4>
-      <el-date-picker
-        v-model="putValue.expirationDate"
-        type="datetime"
-        placeholder="选择日期时间"
-        value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
-        :default-time="defaultTime"
-      ></el-date-picker>
-    </div>
-    <div>
-      <h4>投票检查类型</h4>
-      <el-select size="mini" v-model="putValue.checkId" placeholder="请选择">
-        <el-option
-          v-for="item in checkList"
-          :key="item.id"
-          :label="item.checkType"
-          :value="parseInt(item.id)"
-        ></el-option>
-      </el-select>
-    </div>
-  </aside>
-  <section class="el-main">
-    <div class="vote-main">
-      <div class="bottom-left">
-        <div class="question-box">
-          <input v-model="putValue.name" class="input-dynamic input-question" />
-        </div>
-        <div class="question-choose">
-          <DynamicOptionEdit
-            v-for="item in optionsData"
-            v-model:text="item.name"
+  <main class="main" v-show="!isLoading">
+    <aside class="el-aside">
+      <!-- 选项 -->
+      <div>
+        <h4>投票类型</h4>
+        <el-radio-group v-model="putValue.isMultiple" size="mini">
+          <el-radio :label="0" border>单选</el-radio>
+          <el-radio :label="1" border>多选</el-radio>
+        </el-radio-group>
+      </div>
+      <div>
+        <h4>投票过期时间</h4>
+        <el-date-picker
+          v-model="putValue.expirationDate"
+          type="datetime"
+          placeholder="选择日期时间"
+          value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
+          :default-time="defaultTime"
+        ></el-date-picker>
+      </div>
+      <div>
+        <h4>投票检查类型</h4>
+        <el-select size="mini" v-model="putValue.checkId" placeholder="请选择">
+          <el-option
+            v-for="item in checkList"
             :key="item.id"
-            :id="item.id"
-            :isMultiple="putValue.isMultiple"
-            @remove="removeDynamicInput"
-            @changeText="handleChangeText"
-          />
-        </div>
-        <div class="add-option">
-          <el-button @click="handleAddOption" type="text" icon="el-icon-plus">
-            添加单个选项
-          </el-button>
+            :label="item.checkType"
+            :value="parseInt(item.id)"
+          ></el-option>
+        </el-select>
+      </div>
+    </aside>
+    <section class="el-main">
+      <div class="vote-main">
+        <div class="bottom-left">
+          <div class="question-box">
+            <input
+              v-model="putValue.name"
+              class="input-dynamic input-question"
+            />
+          </div>
+          <div class="question-choose">
+            <DynamicOptionEdit
+              v-for="item in optionsData"
+              v-model:text="item.name"
+              :key="item.id"
+              :id="item.id"
+              :isMultiple="putValue.isMultiple"
+              @remove="removeDynamicInput"
+              @changeText="handleChangeText"
+            />
+          </div>
+          <div class="add-option">
+            <el-button @click="handleAddOption" type="text" icon="el-icon-plus">
+              添加单个选项
+            </el-button>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- 发布并分享按钮 -->
-    <el-button
-      icon="el-icon-s-promotion"
-      type="primary"
-      @click="handleSubmit"
-      class="share"
-    >
-      发布并分享
-    </el-button>
-  </section>
+      <!-- 发布并分享按钮 -->
+      <el-button
+        icon="el-icon-s-promotion"
+        type="primary"
+        @click="handleSubmit"
+        class="share"
+      >
+        发布并分享
+      </el-button>
+    </section>
+  </main>
 </template>
 
 <script setup>
@@ -85,6 +90,7 @@ const {
   updateVoteForDelOption,
   updateVoteForUptOption
 } = useVote()
+const isLoading = ref(true)
 
 const putValue = reactive({})
 
@@ -110,6 +116,7 @@ onMounted(async () => {
     }
   })
   elLoading.close()
+  isLoading.value = false
 })
 
 // 监听 putValue 的变化，自动保存功能
@@ -179,73 +186,78 @@ const handleSubmit = () => {
 </script>
 
 <style scoped lang="less">
-.el-aside {
-  width: 400px;
-  height: calc(100vh - 60px);
-  padding: 20px;
-  background-color: #fff;
-  border-right: 1px solid #dfe5ec;
-  color: #484848;
-}
-
-.el-main {
-  flex: auto;
-  height: calc(100vh - 60px);
-  .vote-main {
-    background-color: #fff;
-    width: 70%;
-    margin: auto;
-    margin-top: 20px;
+.main {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 60px);
+  .el-aside {
+    width: 400px;
+    height: calc(100vh - 60px);
     padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    display: flex;
-    gap: 20px;
-    .bottom-left {
-      flex: 2;
+    background-color: #fff;
+    border-right: 1px solid #dfe5ec;
+    color: #484848;
+  }
+
+  .el-main {
+    flex: auto;
+    height: calc(100vh - 60px);
+    .vote-main {
+      background-color: #fff;
+      width: 70%;
+      margin: auto;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
       display: flex;
-      flex-direction: column;
-      .question-choose {
-        flex: auto;
-      }
-      .add-option {
-        flex: none;
-        height: 50px;
-        line-height: 50px;
-        padding: 0 15px;
+      gap: 20px;
+      .bottom-left {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        .question-choose {
+          flex: auto;
+        }
+        .add-option {
+          flex: none;
+          height: 50px;
+          line-height: 50px;
+          padding: 0 15px;
+        }
       }
     }
+    .share {
+      display: block;
+      margin: 20px auto;
+      line-height: 16px;
+      padding: 11px 35px 10px 35px;
+    }
   }
-  .share {
-    display: block;
-    margin: 20px auto;
-    line-height: 16px;
-    padding: 11px 35px 10px 35px;
-  }
-}
 
-.input-dynamic {
-  box-sizing: border-box;
-  padding: 0 10px;
-  margin-bottom: 10px;
-  width: 100%;
-  height: 45px;
-  background-color: transparent;
-  border: 1px solid #fff;
-  outline: none;
-  color: #484848;
+  .input-dynamic {
+    box-sizing: border-box;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 45px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    outline: none;
+    color: #484848;
 
-  &.input-question {
-    font-size: 24px;
-    text-align: center;
-  }
-  &:hover {
-    border: 1px dashed #ccc;
-  }
-  &:focus {
-    background-color: #f4f4f4;
-    border: 1px solid #f4f4f4;
+    &.input-question {
+      font-size: 24px;
+      text-align: center;
+    }
+    &:hover {
+      border: 1px dashed #ccc;
+    }
+    &:focus {
+      background-color: #f4f4f4;
+      border: 1px solid #f4f4f4;
+    }
   }
 }
 </style>

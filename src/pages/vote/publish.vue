@@ -1,5 +1,5 @@
 <template>
-  <div class="publish-wrapper">
+  <div v-show="!isLoading" class="publish-wrapper">
     <div class="publish-container">
       <!-- 未发布 -->
       <div v-if="curVoteDetail.status === 0" class="not-publish">
@@ -65,6 +65,7 @@ import {
 
 const route = useRoute()
 const router = useRouter()
+const isLoading = ref(true)
 
 const toPage = (address) => {
   router.push(address)
@@ -80,6 +81,7 @@ onMounted(async () => {
   })
   curVoteDetail.value = await getVoteDetail(route.params.id)
   elLoading.close()
+  isLoading.value = false
 })
 
 const shareLink = ref(

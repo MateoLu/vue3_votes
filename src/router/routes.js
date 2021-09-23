@@ -32,7 +32,10 @@ const routes = [
       {
         path: '/vote/publish/:id',
         name: 'votePublish',
-        component: () => import('@/pages/vote/publish.vue')
+        component: () => import('@/pages/vote/publish.vue'),
+        meta: {
+          isPreview: true
+        }
       },
       {
         path: '/vote/report/:id',

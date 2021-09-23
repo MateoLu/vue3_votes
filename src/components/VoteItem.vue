@@ -57,7 +57,6 @@
             <el-link :underline="false" icon="el-icon-more"></el-link>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="review">预览项目</el-dropdown-item>
                 <el-dropdown-item command="stop">暂停项目</el-dropdown-item>
                 <el-dropdown-item command="del">删除项目</el-dropdown-item>
               </el-dropdown-menu>
@@ -92,15 +91,15 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const { deleteVote } = useVote()
+const { deleteVote, getVoteDetail, updateVote } = useVote()
 
 const handleCommand = async (command) => {
   switch (command) {
-    case 'review':
-      console.log(command)
-      break
     case 'stop':
-      console.log(command)
+      // eslint-disable-next-line no-case-declarations
+      const res = await getVoteDetail(props.id)
+      await updateVote(props.id, { ...res, status: 0 })
+      location.reload()
       break
     case 'del':
       await deleteVote(props.id)

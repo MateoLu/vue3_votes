@@ -46,7 +46,7 @@
           background
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
-          default-current-page="1"
+          :default-current-page="1"
           :page-size="7"
           :total="parseInt(pager.total)"
         ></el-pagination>
