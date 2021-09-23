@@ -83,9 +83,11 @@ onMounted(async () => {
   elLoading.close()
   isLoading.value = false
 })
-
+console.log(location)
 const shareLink = ref(
-  `http://${location.host}/#/survey/${window.btoa(route.params.id)}`
+  `http://${location.host + location.pathname}#/survey/${window.btoa(
+    route.params.id
+  )}`
 )
 const success = (value) => {
   ElMessage.success('复制成功')
@@ -167,7 +169,7 @@ const handlePublish = async () => {
       }
       .share-input {
         display: flex;
-        width: 450px;
+        // width: 450px;
         height: 35px;
         .link-address {
           flex: auto;

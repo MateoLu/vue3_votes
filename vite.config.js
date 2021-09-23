@@ -52,7 +52,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist',
+    outDir: 'zbc-vote',
     rollupOptions: {
       assetsDir: 'static/images/',
       output: {
@@ -71,5 +71,5 @@ export default defineConfig({
     // 取消计算文件大小，加快打包速度
     brotliSize: false
   },
-  base: './'
+  base: '/zbc-vote/'
 })
