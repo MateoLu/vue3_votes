@@ -3,7 +3,7 @@ import App from './App.vue'
 import store from '@/store'
 import router from '@/router'
 import '@/assets/less/index.less'
-import 'element-plus/dist/index.css'
+import ElementPlus from 'element-plus'
 
 const app = createApp(App)
 
@@ -11,7 +11,7 @@ const app = createApp(App)
 app.config.globalProperties.$ELEMENT = { size: 'small', zIndex: 3000 }
 
 // elementPlus(App);
-app.use(store).use(router)
+app.use(store).use(router).use(ElementPlus)
 app.mount('#app')
 
 // 自定义指令 v-copy

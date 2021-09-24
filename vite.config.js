@@ -4,6 +4,7 @@ import ViteComponents, { ElementPlusResolver } from 'vite-plugin-components'
 import path from 'path'
 import viteCompression from 'vite-plugin-compression'
 import html from 'vite-plugin-html'
+import externalGlobals from 'rollup-plugin-external-globals'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -59,7 +60,15 @@ export default defineConfig({
         chunkFileNames: 'static/js/[name]-[hash].js',
         entryFileNames: 'static/js/[name]-[hash].js',
         assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
-      }
+      },
+      external: ['echarts', 'vue', 'element-plus'],
+      plugins: [
+        externalGlobals({
+          echarts: 'echarts',
+          vue: 'Vue',
+          'element-plus': 'ElementPlus'
+        })
+      ]
     },
     terserOptions: {
       compress: {
