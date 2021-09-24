@@ -83,7 +83,6 @@ onMounted(async () => {
   elLoading.close()
   isLoading.value = false
 })
-console.log(location)
 const shareLink = ref(
   `http://${location.host + location.pathname}#/survey/${window.btoa(
     route.params.id

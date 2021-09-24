@@ -28,7 +28,7 @@
       </div>
       <div v-show="!isSuccess" class="content-wrapper">
         <div class="begin-content">
-          <p>{{ detail.name }}</p>
+          <p class="title">{{ detail.name }}</p>
           <div class="desc">欢迎参与本次投票，现在我们就马上开始吧！</div>
           <div class="check-content">
             <div class="mail-check">
@@ -36,7 +36,7 @@
                 :model="checkForm"
                 ref="checkValidateForm"
                 size="mini"
-                style="width: 300px"
+                style="width: 270px"
                 :rules="rules"
               >
                 <el-form-item
@@ -126,7 +126,6 @@ onMounted(async () => {
   try {
     const res = await getVoteDetailStatistic(voteId)
     if (res.code == 200) {
-      console.log(res.data)
       detail.value = res.data
       document.title = detail.value.name
     } else {
@@ -251,10 +250,46 @@ const submitForm = () => {
 </script>
 
 <style lang="less" scoped>
+@media screen and (max-width: 400px) {
+  .survey-wrapper {
+    padding: 0 !important;
+    .container {
+      width: 100% !important;
+      .main-content {
+        .title {
+          font-size: 20px !important;
+        }
+        .desc {
+          font-size: 14px !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 814px) {
+  .survey-wrapper {
+    padding: 0 !important;
+
+    .container {
+      width: 100% !important;
+
+      .main-content {
+        .title {
+          font-size: 20px !important;
+        }
+        .desc {
+          font-size: 14px !important;
+        }
+      }
+    }
+  }
+}
+
 .survey-wrapper {
-  width: 100vw;
-  height: 100vh;
-  padding-top: 70px;
+  width: 100%;
+  height: 100%;
+  padding: 70px 0 0;
   .container {
     width: 814px;
     padding: 30px 40px 66px;
@@ -289,15 +324,15 @@ const submitForm = () => {
       .check-content {
         margin-top: 20px;
       }
-      p {
+      .title {
         text-align: center;
         margin: 0;
-        font-size: 24px;
+        font-size: 20px;
         color: #4c4c4c;
       }
       .desc {
         margin-top: 20px;
-        font-size: 16px;
+        font-size: 14px;
         color: #666;
       }
       .line {

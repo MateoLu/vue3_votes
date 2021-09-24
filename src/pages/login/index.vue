@@ -4,7 +4,6 @@
     <div class="bg1">
       <h1 class="title">甄步绰投票系统</h1>
       <p class="desc">
-        ——
         该系统的功能有发布、下线，创建、删除、编辑投票问卷等功能，用户可通过发布的问卷链接进行投票
       </p>
       <div class="login-wrapper">
@@ -18,6 +17,7 @@
               :rules="loginRules"
               ref="loginForm"
               class="login-From"
+              @keydown.enter="submitLoginForm"
             >
               <el-form-item label="用户名" prop="username">
                 <el-input v-model="loginParams.username"></el-input>
@@ -50,6 +50,7 @@
               :rules="registerRules"
               ref="registerForm"
               class="register-From"
+              @keydown.enter="submitregisterForm"
             >
               <el-form-item label="用户名" prop="username">
                 <el-input v-model="registerParams.username"></el-input>
@@ -87,11 +88,10 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { reactive, ref, watch } from 'vue'
+import { ElNotification } from 'element-plus'
 import { useAuth } from '@/hooks/auth'
 
-// const { ctx } = getCurrentInstance()
 const { userLogin, loading, userRegister } = useAuth()
 const labelPosition = ref('right')
 
@@ -103,15 +103,7 @@ const loginParams = reactive({
 })
 const loginRules = reactive({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    {
-      min: 6,
-      max: 18,
-      message: '长度在 6 到 18 个字符',
-      trigger: 'blur'
-    }
-  ]
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 })
 const submitLoginForm = () => {
   loginForm.value.validate(async (valid) => {
@@ -122,13 +114,22 @@ const submitLoginForm = () => {
       }
       await userLogin(params)
     } else {
-      ElMessage.error('账号或密码不符合参数要求')
+      ElNotification({
+        type: 'error',
+        title: '错误',
+        message: '账号或密码不符合参数要求'
+      })
     }
   })
 }
 
 // 注册业务逻辑
 const activeName = ref('first')
+watch(activeName, () => {
+  loginForm.value.resetFields()
+  registerForm.value.resetFields()
+})
+
 const registerForm = ref(null)
 const registerParams = reactive({
   username: '',
@@ -168,10 +169,18 @@ const submitregisterForm = () => {
         })
         registerForm.value.resetFields()
       } else {
-        ElMessage.error('密码不一致')
+        ElNotification({
+          type: 'error',
+          title: '错误',
+          message: '密码不一致'
+        })
       }
     } else {
-      ElMessage.error('账号或密码不符合参数要求')
+      ElNotification({
+        type: 'error',
+        title: '错误',
+        message: '账号或密码不符合参数要求'
+      })
     }
   })
 }
@@ -188,8 +197,8 @@ const submitregisterForm = () => {
   .bg-voting {
     z-index: 10;
     position: absolute;
-    width: 800px;
-    height: 480px;
+    width: 50%;
+    height: 50%;
     left: 0;
     bottom: 40px;
     background: url(../../assets/images/login_voting.svg) no-repeat;
@@ -218,6 +227,7 @@ const submitregisterForm = () => {
       color: #fff;
       font-size: 16px;
       font-weight: lighter;
+      line-height: 24px;
     }
     .footer {
       position: absolute;

@@ -7,12 +7,6 @@
         &nbsp;甄布绰投票系统
       </div>
       <div class="user-info">
-        <!-- 我的问卷 -->
-        <span>
-          <i class="el-icon-document"></i>
-          我的问卷
-        </span>
-
         <!-- 个人信息和退出 -->
         <el-button>
           <el-dropdown @command="handleCommand">

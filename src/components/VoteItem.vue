@@ -141,6 +141,8 @@ const toEditPage = () => {
       }
     )
       .then(async () => {
+        const res = await getVoteDetail(props.id)
+        await updateVote(props.id, { ...res, status: 0 })
         router.push(`/vote/edit/${props.id}`)
       })
       .catch(() => {})

@@ -64,6 +64,7 @@ import { useRouter } from 'vue-router'
 import { useVote } from '@/hooks/vote'
 import store from '@/store'
 import { ElLoading } from 'element-plus'
+import dayjs from 'dayjs'
 
 export default defineComponent({
   components: {
@@ -77,6 +78,8 @@ export default defineComponent({
       const elLoading = ElLoading.service({ fullscreen: true, lock: true })
       await setVotes(1)
       await store.dispatch('getCheckList')
+      console.log(votes.value)
+
       elLoading.close()
     })
 
@@ -137,7 +140,9 @@ export default defineComponent({
     const handleCreateVote = async () => {
       const params = {
         checkId: 3,
-        expirationDate: new Date().getTime(),
+        expirationDate: dayjs(new Date().getTime()).format(
+          'YYYY-MM-DDTHH:mm:ss.000+08:00'
+        ),
         name: '投票标题',
         status: 0,
         optionList: [{ name: '选项1' }, { name: '选项2' }]

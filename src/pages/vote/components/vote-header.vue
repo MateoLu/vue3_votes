@@ -36,18 +36,25 @@
     <!-- 中间编辑项目 -->
     <div class="center">
       <el-menu
-        :default-active="route.fullPath"
+        :default-active="activeKey"
         class="el-menu-demo"
         mode="horizontal"
-        router
       >
-        <el-menu-item @click="toEdit">编辑项目</el-menu-item>
+        <el-menu-item @click="toEdit" :index="`/vote/edit/${curVoteId}`">
+          编辑项目
+        </el-menu-item>
         <i class="el-icon-arrow-right"></i>
-        <el-menu-item :index="`/vote/publish/${curVoteId}`">
+        <el-menu-item
+          @click="goPage(`/vote/publish/${curVoteId}`)"
+          :index="`/vote/publish/${curVoteId}`"
+        >
           发布项目
         </el-menu-item>
         <i class="el-icon-arrow-right"></i>
-        <el-menu-item :index="`/vote/report/${curVoteId}`">
+        <el-menu-item
+          @click="goPage(`/vote/report/${curVoteId}`)"
+          :index="`/vote/report/${curVoteId}`"
+        >
           数据报表
         </el-menu-item>
       </el-menu>
@@ -137,6 +144,7 @@ import { useStore } from 'vuex'
 import { RefreshRight, CircleCheck } from '@element-plus/icons'
 import { useVote } from '@/hooks/vote'
 import { ElMessageBox, ElLoading, ElNotification } from 'element-plus'
+import { getVoteDetail } from '@/utils/storage'
 
 const router = useRouter()
 const route = useRoute()
@@ -154,8 +162,11 @@ watch(loading, (n) => {
 })
 
 const goPage = (address) => {
+  isFirst.value = true
   router.push(address)
 }
+
+const activeKey = computed(() => route.fullPath)
 
 const toEdit = () => {
   if (curVoteDetail.value.status != 1) {
@@ -169,10 +180,17 @@ const toEdit = () => {
         cancelButtonText: '取消'
       }
     )
-      .then(() => {
+      .then(async () => {
+        const res = getVoteDetail(route.params.id)
+        await updateVote(route.params.id, {
+          ...res,
+          status: 0
+        })
         goPage(`/vote/edit/${curVoteId.value}`)
       })
-      .catch(() => {})
+      .catch((e) => {
+        location.reload()
+      })
   }
 }
 
@@ -225,8 +243,7 @@ const handlePublish = () => {
           type: 'success'
         })
       }, 500)
-
-      setTimeout(() => location.reload(), 800)
+      location.reload()
     })
     .catch(() => {})
 }

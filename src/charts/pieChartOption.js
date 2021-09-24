@@ -1,7 +1,8 @@
 export default function pieChartOption(options = { name: '', data: [] }) {
   return {
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+      formatter: '{a} <br/>{b} : {c} ({d}%)'
     },
     legend: {
       orient: 'horizontal',

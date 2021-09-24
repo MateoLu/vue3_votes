@@ -15,8 +15,6 @@
           v-model="putValue.expirationDate"
           type="datetime"
           placeholder="选择日期时间"
-          value-format="YYYY-MM-DDTHH:mm:ss.000+00:00"
-          :default-time="defaultTime"
         ></el-date-picker>
       </div>
       <div>
@@ -74,12 +72,13 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import DynamicOptionEdit from './components/dynamic-option-edit.vue'
-import { ElMessageBox, ElMessage, ElLoading } from 'element-plus'
+import { ElMessageBox, ElLoading, ElNotification } from 'element-plus'
 import { useStore } from 'vuex'
 import { useVote } from '@/hooks/vote'
 import { useRoute } from 'vue-router'
 import { debunce } from '@/utils'
 import router from '@/router'
+import dayjs from 'dayjs'
 
 const store = useStore()
 const route = useRoute()
@@ -119,28 +118,43 @@ onMounted(async () => {
   isLoading.value = false
 })
 
+const isFirst = ref(true)
 // 监听 putValue 的变化，自动保存功能
 watch(
   putValue,
   debunce(async (n, o) => {
+    if (isFirst.value) {
+      isFirst.value = false
+      return
+    }
+    if (n.name === '') return
+    console.log(n.expirationDate)
+    if (n.expirationDate == null) return
+    const params = { ...n }
     if (
-      new Date(n.expirationDate).getTime() >
-      new Date(defaultTime.value).getTime()
+      new Date(
+        dayjs(n.expirationDate).format('YYYY-MM-DDTHH:mm:ss.000+08:00')
+      ).getTime() >
+      new Date(
+        dayjs(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ss.000+08:00')
+      ).getTime()
     ) {
+      params.status = 0
       n.status = 0
     } else {
+      params.status = 2
       n.status = 2
     }
-
-    await updateVote(voteId.value, n)
+    params.expirationDate = dayjs(n.expirationDate).format(
+      'YYYY-MM-DDTHH:mm:ss.000+08:00'
+    )
+    await updateVote(voteId.value, params)
     await getVoteDetail(voteId.value)
-  }, 500)
+  }, 800)
 )
 
 // 验证方式列表
 const checkList = computed(() => store.state.checkList)
-
-const defaultTime = ref(new Date())
 
 // 更改问题名字
 const handleChangeText = debunce(async ({ id, text }) => {
@@ -173,13 +187,42 @@ const handleSubmit = () => {
     cancelButtonText: '取消'
   })
     .then(async () => {
-      await updateVote(voteId.value, { ...putValue, status: 1 })
-      router.replace(`/vote/publish/${voteId.value}`)
+      console.log(putValue)
+      if (
+        optionsData.value.length < 2 ||
+        new Set(optionsData.value.map((item) => item.name)).size <
+          optionsData.value.length
+      ) {
+        ElNotification({
+          title: '警告',
+          message: '投票选项要唯一且至少为两项',
+          type: 'warning'
+        })
+      } else if (putValue.status == 2) {
+        ElNotification({
+          title: '警告',
+          message: '当前设置发布时间为过期的或未选择投票过期时间',
+          type: 'warning'
+        })
+      } else if (putValue.name === '') {
+        ElNotification({
+          title: '警告',
+          message: '投票标题不能为空',
+          type: 'warning'
+        })
+      } else {
+        await updateVote(voteId.value, {
+          ...putValue,
+          status: 1
+        })
+        router.push(`/vote/publish/${voteId.value}`)
+      }
     })
     .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '已取消发布'
+      ElNotification({
+        title: '提示',
+        message: '已取消发布',
+        type: 'info'
       })
     })
 }

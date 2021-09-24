@@ -22,7 +22,7 @@
             <div class="text">{{ postType }}</div>
           </div>
           <div class="row-item">
-            <div class="title">数据总量</div>
+            <div class="title">投票总量</div>
             <div class="text">{{ voteDetail.recordTotalCount }}</div>
           </div>
           <div class="row-item">

@@ -23,7 +23,16 @@ export default new Vuex.Store({
       try {
         const res = await getCheckList()
         if (res.code == 200) {
-          setCheckList(res.data)
+          setCheckList(
+            res.data.map((item) => {
+              if (item.id == 2) {
+                item.checkType = '邮箱'
+              } else if (item.id == 3) {
+                item.checkType = '手机号码'
+              }
+              return item
+            })
+          )
           commit('setCheckList', res.data)
         }
       } catch (error) {
