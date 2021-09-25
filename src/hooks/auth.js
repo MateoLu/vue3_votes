@@ -28,7 +28,7 @@ export function useAuth() {
         } else {
           ElNotification({
             title: '提示',
-            message: res.message,
+            message: '账号或密码不正确',
             type: 'error',
             duration: 2000
           })

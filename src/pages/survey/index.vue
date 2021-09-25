@@ -97,7 +97,7 @@
 import { onMounted, ref, watch, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { getVoteDetailStatistic, postVote } from '@/api/vote'
-import { ElLoading, ElMessage } from 'element-plus'
+import { ElLoading, ElNotification } from 'element-plus'
 import { debunce } from '@/utils'
 
 const route = useRoute()
@@ -224,23 +224,36 @@ const submitForm = () => {
         const elLoading = ElLoading.service({
           fullscreen: true,
           lock: true,
-          text: '提交中'
+          text: '提交中...'
         })
         const res = await postVote(submitParams.value)
         if (res.code == 200) {
           isSuccess.value = true
         } else {
-          ElMessage.error(res.message)
+          ElNotification({
+            title: '错误',
+            type: 'error',
+            message: res.message
+          })
+          window.location.reload()
         }
         choose.value = ''
         checkList.value = []
         elLoading.close()
         checkValidateForm.value.resetFields()
       } else {
-        ElMessage.error('请投入宝贵的一票哟')
+        ElNotification({
+          title: '温馨提示',
+          type: 'warning',
+          message: '请投入宝贵的一票哟'
+        })
       }
     } else {
-      ElMessage.error('请输入有效的表单')
+      ElNotification({
+        title: '温馨提示',
+        type: 'warning',
+        message: '请输入有效的表单'
+      })
       checkValidateForm.value.resetFields()
       return false
     }

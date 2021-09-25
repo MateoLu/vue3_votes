@@ -93,7 +93,11 @@ export function useVote() {
         store.commit('vote/setLoading', false)
         loading.value = false
       } else {
-        ElMessage.error(res.message)
+        ElNotification({
+          title: '错误',
+          message: res.message,
+          type: 'error'
+        })
         loading.value = false
         store.commit('vote/setLoading', false)
       }
@@ -117,7 +121,11 @@ export function useVote() {
 
         return res.data
       } else {
-        ElMessage.error(res.message)
+        ElNotification({
+          title: '错误',
+          message: res.message,
+          type: 'error'
+        })
         loading.value = false
         store.commit('vote/setLoading', false)
       }
@@ -138,7 +146,11 @@ export function useVote() {
       if (res.code == 200) {
         loading.value = false
       } else {
-        ElMessage.error(res.message)
+        ElNotification({
+          title: '错误',
+          message: res.message,
+          type: 'error'
+        })
         loading.value = false
       }
       store.commit('vote/setLoading', false)
@@ -159,7 +171,11 @@ export function useVote() {
       if (res.code == 200) {
         loading.value = false
       } else {
-        ElMessage.error(res.message)
+        ElNotification({
+          title: '错误',
+          message: res.message,
+          type: 'error'
+        })
         loading.value = false
       }
       store.commit('vote/setLoading', false)

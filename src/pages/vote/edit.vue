@@ -198,7 +198,7 @@ const handleSubmit = () => {
           message: '投票选项要唯一且至少为两项',
           type: 'warning'
         })
-      } else if (putValue.status == 2) {
+      } else if (putValue.status == 2 || putValue.expirationDate === null) {
         ElNotification({
           title: '警告',
           message: '当前设置发布时间为过期的或未选择投票过期时间',
