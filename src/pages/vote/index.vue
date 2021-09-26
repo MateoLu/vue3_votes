@@ -2,7 +2,9 @@
   <div class="vote-container">
     <VoteHeader />
     <section class="main-wrapper">
-      <router-view />
+      <el-scrollbar>
+        <router-view />
+      </el-scrollbar>
     </section>
   </div>
 </template>
@@ -22,10 +24,10 @@ export default defineComponent({
 .vote-container {
   width: 100vw;
   height: 100%;
-  overflow: hidden;
   .main-wrapper {
     width: 100%;
     height: calc(100% - 60px);
+    overflow-y: auto;
   }
 }
 </style>

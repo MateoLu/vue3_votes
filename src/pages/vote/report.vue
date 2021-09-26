@@ -22,8 +22,8 @@
             <div class="text">{{ postType }}</div>
           </div>
           <div class="row-item">
-            <div class="title">投票总量</div>
-            <div class="text">{{ voteDetail.recordTotalCount }}</div>
+            <div class="title">投票人数</div>
+            <div class="text">{{ voteDetail.participantTotalCount }}</div>
           </div>
           <div class="row-item">
             <div class="title">验证方式</div>
@@ -71,8 +71,15 @@
               :data="optionsData.data"
             />
           </div>
+          <div class="table-wrapper">
+            <el-table border :data="tableData" show-summary style="width: 100%">
+              <el-table-column prop="name" label="选项" />
+              <el-table-column prop="value" label="投票次数" />
+            </el-table>
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   </div>
 </template>
@@ -85,8 +92,11 @@ import { ElLoading } from 'element-plus'
 import BarChart from '@/components/BarChart.vue'
 import LineChart from '@/components/LineChart.vue'
 import PieChart from '@/components/PieChart.vue'
+import Footer from '@/components/Footer.vue'
 
 const isLoading = ref(true)
+
+const tableData = ref([])
 
 onMounted(async () => {
   const elLoading = ElLoading.service({
@@ -105,6 +115,7 @@ onMounted(async () => {
 
       optionsData.name = res.data.name
       optionsData.data = statisticData
+      tableData.value = statisticData
     }
   } catch (error) {
     console.log(error)
@@ -193,6 +204,10 @@ const handleCommand = (command) => {
         .chart-wrapper {
           height: 336px;
           width: 1176px;
+        }
+        .table-wrapper {
+          width: 80%;
+          margin: 40px auto;
         }
       }
       .row-list {

@@ -46,6 +46,7 @@
           </template>
         </el-result>
       </div>
+      <Footer />
     </div>
   </div>
 </template>
@@ -54,6 +55,7 @@
 import { useVote } from '@/hooks/vote'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Footer from '@/components/Footer.vue'
 import {
   ElLoading,
   ElMessageBox,

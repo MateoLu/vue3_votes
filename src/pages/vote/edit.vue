@@ -37,6 +37,10 @@
               v-model="putValue.name"
               class="input-dynamic input-question"
             />
+            <input
+              v-model="putValue.description"
+              class="input-dynamic input-description"
+            />
           </div>
           <div class="question-choose">
             <DynamicOptionEdit
@@ -65,6 +69,7 @@
       >
         发布并分享
       </el-button>
+      <Footer />
     </section>
   </main>
 </template>
@@ -79,6 +84,7 @@ import { useRoute } from 'vue-router'
 import { debunce } from '@/utils'
 import router from '@/router'
 import dayjs from 'dayjs'
+import Footer from '@/components/Footer.vue'
 
 const store = useStore()
 const route = useRoute()
@@ -293,6 +299,11 @@ const handleSubmit = () => {
     &.input-question {
       font-size: 24px;
       text-align: center;
+    }
+    &.input-description {
+      font-size: 20px;
+      height: 30px;
+      color: #888;
     }
     &:hover {
       border: 1px dashed #ccc;

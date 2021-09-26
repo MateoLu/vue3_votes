@@ -51,8 +51,7 @@
           :total="parseInt(pager.total)"
         ></el-pagination>
       </div>
-      <div class="foot"></div>
-      <footer class="footer">&copy; GGS · 甄步绰小组</footer>
+      <Footer />
     </div>
   </div>
 </template>
@@ -65,11 +64,13 @@ import { useVote } from '@/hooks/vote'
 import store from '@/store'
 import { ElLoading } from 'element-plus'
 import dayjs from 'dayjs'
+import Footer from '@/components/Footer.vue'
 
 export default defineComponent({
   components: {
     TheHeader,
-    VoteItem
+    VoteItem,
+    Footer
   },
   setup() {
     const { setVotes, votes, pager, makeVote } = useVote()
@@ -144,6 +145,7 @@ export default defineComponent({
           'YYYY-MM-DDTHH:mm:ss.000+08:00'
         ),
         name: '投票标题',
+        description: '写下您的投票项目描述......',
         status: 0,
         optionList: [{ name: '选项1' }, { name: '选项2' }]
       }
@@ -218,16 +220,6 @@ export default defineComponent({
           }
         }
       }
-    }
-    .foot {
-      height: 100px;
-    }
-    .footer {
-      height: 114px;
-      padding: 41px 0;
-      line-height: 32px;
-      color: #d0d0d0;
-      text-align: center;
     }
   }
 }

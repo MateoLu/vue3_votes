@@ -13,23 +13,27 @@
       <el-result icon="warning" title="抱歉，该投票问卷暂未发布！"></el-result>
     </div>
     <div class="container" v-if="detail.status == 1">
-      <div v-show="isSuccess" class="success-result">
-        <el-result
-          icon="success"
-          title="投票成功"
-          subTitle="感谢您的帮助与支持，点击继续投票即可再次进行投票"
-        >
-          <template #extra>
-            <el-button @click="handleAgainSubmit" type="primary" size="medium">
-              继续投票
-            </el-button>
-          </template>
-        </el-result>
+      <div v-if="isSuccess" class="success-result">
+        <h2 class="res-title">当前关于《{{ detail.name }}》的投票结果</h2>
+        <div class="info">
+          <el-icon color="#67C23A" :size="20">
+            <check />
+          </el-icon>
+          <span>投票成功</span>
+        </div>
+        <ProgressBar
+          :count="detail.recordTotalCount"
+          :list="detail.optionVOList"
+          :activeItems="activeItems"
+        />
+        <p class="static">
+          已有{{ detail.participantTotalCount }}人投票 · 剩{{ timeRemaining }}
+        </p>
       </div>
-      <div v-show="!isSuccess" class="content-wrapper">
+      <div v-if="!isSuccess" class="content-wrapper">
         <div class="begin-content">
           <p class="title">{{ detail.name }}</p>
-          <div class="desc">欢迎参与本次投票，现在我们就马上开始吧！</div>
+          <div class="desc">{{ detail.description }}</div>
           <div class="check-content">
             <div class="mail-check">
               <el-form
@@ -99,6 +103,9 @@ import { useRoute } from 'vue-router'
 import { getVoteDetailStatistic, postVote } from '@/api/vote'
 import { ElLoading, ElNotification } from 'element-plus'
 import { debunce } from '@/utils'
+import ProgressBar from '@/components/ProgressBar.vue'
+import { Check } from '@element-plus/icons'
+import { dateCount } from '@/utils/index'
 
 const route = useRoute()
 const voteId = window.atob(route.params.id)
@@ -117,6 +124,16 @@ const checkValidateForm = ref(null)
 const isSuccess = ref(false)
 const iSError = ref(false)
 
+const activeItems = computed(() => {
+  if (choose.value !== '') {
+    return [choose.value]
+  } else {
+    return checkList.value
+  }
+})
+
+const timeRemaining = computed(() => dateCount(detail.value.expirationDate))
+
 onMounted(async () => {
   const elLoading = ElLoading.service({
     fullscreen: true,
@@ -125,6 +142,7 @@ onMounted(async () => {
   })
   try {
     const res = await getVoteDetailStatistic(voteId)
+    console.log(res)
     if (res.code == 200) {
       detail.value = res.data
       document.title = detail.value.name
@@ -210,11 +228,6 @@ watch(checkList, (n) => {
   }))
 })
 
-const handleAgainSubmit = () => {
-  isSuccess.value = false
-  location.reload()
-}
-
 // 表单验证
 const submitForm = () => {
   checkValidateForm.value.validate(async (valid) => {
@@ -228,6 +241,9 @@ const submitForm = () => {
         })
         const res = await postVote(submitParams.value)
         if (res.code == 200) {
+          const res = await getVoteDetailStatistic(voteId)
+          detail.value = res.data
+          console.log(detail.value)
           isSuccess.value = true
         } else {
           ElNotification({
@@ -235,10 +251,8 @@ const submitForm = () => {
             type: 'error',
             message: res.message
           })
-          window.location.reload()
+          location.reload()
         }
-        choose.value = ''
-        checkList.value = []
         elLoading.close()
         checkValidateForm.value.resetFields()
       } else {
@@ -263,15 +277,15 @@ const submitForm = () => {
 </script>
 
 <style lang="less" scoped>
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px) {
   .survey-wrapper {
     padding: 0 !important;
     .container {
       width: 100% !important;
+      .res-title {
+        font-size: 22px !important;
+      }
       .main-content {
-        .title {
-          font-size: 20px !important;
-        }
         .desc {
           font-size: 14px !important;
         }
@@ -288,9 +302,6 @@ const submitForm = () => {
       width: 100% !important;
 
       .main-content {
-        .title {
-          font-size: 20px !important;
-        }
         .desc {
           font-size: 14px !important;
         }
@@ -312,6 +323,25 @@ const submitForm = () => {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    .success-result {
+      .res-title {
+        text-align: center;
+        color: #484848;
+      }
+      .info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 3px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #666;
+      }
+      .static {
+        font-size: 14px;
+        color: #777;
+      }
+    }
     .footer {
       padding-left: 20px;
     }
@@ -340,12 +370,12 @@ const submitForm = () => {
       .title {
         text-align: center;
         margin: 0;
-        font-size: 20px;
+        font-size: 24px;
         color: #4c4c4c;
       }
       .desc {
         margin-top: 20px;
-        font-size: 14px;
+        font-size: 16px;
         color: #666;
       }
       .line {

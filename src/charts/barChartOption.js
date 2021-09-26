@@ -1,7 +1,10 @@
 export default function barChartOption(options = { name: '', data: [] }) {
   const xData = options.data.map((item) => item.name)
-  const seriesData = options.data.map((item) => item.value)
-  const maxNum = Math.max(...seriesData)
+  const sum = options.data.reduce((prev, cur) => prev + cur.value, 0)
+  const seriesData = options.data.map((item) =>
+    ((item.value / sum) * 100).toFixed(2)
+  )
+  // const maxNum = Math.max(...seriesData)
   return {
     xAxis: {
       type: 'category',
@@ -9,18 +12,17 @@ export default function barChartOption(options = { name: '', data: [] }) {
     },
     yAxis: {
       type: 'value',
-      splitLine: { show: false },
-      splitNumber: maxNum
+      axisLabel: {
+        formatter: '{value} %'
+      },
+      max: 100
     },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'shadow'
       },
-      formatter: (params) => {
-        const tar = params[0]
-        return tar.name + ' : ' + tar.value
-      }
+      formatter: '{b}' + ': ' + '{c}%'
     },
     grid: {
       left: '25%',
@@ -38,7 +40,8 @@ export default function barChartOption(options = { name: '', data: [] }) {
         label: {
           show: true,
           position: 'top',
-          valueAnimation: true
+          valueAnimation: false,
+          formatter: '{c}%'
         },
         barWidth: 50
       }

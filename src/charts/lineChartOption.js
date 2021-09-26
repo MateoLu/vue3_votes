@@ -1,7 +1,7 @@
 export default function barChartOption(options = { name: '', data: [] }) {
   const xData = options.data.map((item) => item.name)
   const seriesData = options.data.map((item) => item.value)
-  const maxNum = Math.max(...seriesData)
+  // const maxNum = Math.max(...seriesData)
   return {
     xAxis: {
       type: 'category',
@@ -11,8 +11,7 @@ export default function barChartOption(options = { name: '', data: [] }) {
       }
     },
     yAxis: {
-      type: 'value',
-      splitNumber: maxNum
+      type: 'value'
     },
     grid: {
       left: '25%',

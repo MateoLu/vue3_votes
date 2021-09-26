@@ -91,7 +91,7 @@
           <span class="drawer-tip">提示：当前为预览页面，答案不被记录。</span>
         </div>
         <div v-if="curVoteDetail.status !== 1" class="drawer-right">
-          <el-button @click="handlePublish" type="primary">
+          <el-button size="small" @click="handlePublish" type="primary">
             发布并分享
           </el-button>
         </div>
@@ -225,6 +225,11 @@ const handlePublish = () => {
     }
   )
     .then(async () => {
+      ElNotification({
+        title: '成功',
+        message: '投票项目已成功发布',
+        type: 'success'
+      })
       const elLoading = ElLoading.service({
         fullscreen: true,
         lock: true,
@@ -235,21 +240,14 @@ const handlePublish = () => {
         ...curVoteDetail.value,
         status: 1
       })
-      setTimeout(() => {
-        elLoading.close()
-        ElNotification({
-          title: '成功',
-          message: '投票项目已成功发布',
-          type: 'success'
-        })
-      }, 500)
+      elLoading.close()
       location.reload()
     })
     .catch(() => {})
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .header-container {
   position: relative;
   width: 100%;
@@ -303,6 +301,10 @@ const handlePublish = () => {
     text-align: right;
     margin-right: 30px;
   }
+}
+
+.el-drawer__body {
+  padding: 0;
 }
 
 .drawer-container {
