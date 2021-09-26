@@ -1,87 +1,94 @@
 <template>
-  <div v-if="!isLoading" class="report-wrapper">
-    <div class="empty" v-if="voteDetail.recordTotalCount === 0">
-      <el-empty
-        description="该项目暂无数据，点击下方按钮开始收集吧"
-        style="height: 100%"
-      >
-        <el-button
-          @click="$router.replace(`/vote/publish/${voteDetail.id}`)"
-          type="primary"
+  <el-scrollbar>
+    <div v-if="!isLoading" class="report-wrapper">
+      <div class="empty" v-if="voteDetail.recordTotalCount === 0">
+        <el-empty
+          description="该项目暂无数据，点击下方按钮开始收集吧"
+          style="height: 100%"
         >
-          分享
-        </el-button>
-      </el-empty>
-    </div>
-    <div v-else-if="voteDetail.recordTotalCount !== 0" class="container">
-      <div class="data-overview">
-        <div class="label">数据概况</div>
-        <div class="row-list">
-          <div class="row-item">
-            <div class="title">投票类型</div>
-            <div class="text">{{ postType }}</div>
-          </div>
-          <div class="row-item">
-            <div class="title">投票人数</div>
-            <div class="text">{{ voteDetail.participantTotalCount }}</div>
-          </div>
-          <div class="row-item">
-            <div class="title">验证方式</div>
-            <div class="text">{{ checkType }}</div>
-          </div>
-        </div>
-        <div class="label">统计报表</div>
-        <div class="report-content">
-          <div class="question-content">
-            投票标题：{{ voteDetail.name }}
-            <el-dropdown @command="handleCommand" style="float: right">
-              <span class="el-dropdown-link">
-                图表类型
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="pie" icon="el-icon-pie-chart">
-                    饼状图
-                  </el-dropdown-item>
-                  <el-dropdown-item command="bar" icon="el-icon-s-data">
-                    柱状图
-                  </el-dropdown-item>
-                  <el-dropdown-item command="line" icon="el-icon-share">
-                    折线图
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-          </div>
-          <div class="chart-wrapper">
-            <BarChart
-              v-if="showType === 'bar'"
-              :name="optionsData.name"
-              :data="optionsData.data"
-            />
-            <LineChart
-              v-if="showType === 'line'"
-              :name="optionsData.name"
-              :data="optionsData.data"
-            />
-            <PieChart
-              v-if="showType === 'pie'"
-              :name="optionsData.name"
-              :data="optionsData.data"
-            />
-          </div>
-          <div class="table-wrapper">
-            <el-table border :data="tableData" show-summary style="width: 100%">
-              <el-table-column prop="name" label="选项" />
-              <el-table-column prop="value" label="投票次数" />
-            </el-table>
-          </div>
-        </div>
+          <el-button
+            @click="$router.replace(`/vote/publish/${voteDetail.id}`)"
+            type="primary"
+          >
+            分享
+          </el-button>
+        </el-empty>
       </div>
-      <Footer />
+      <div v-else-if="voteDetail.recordTotalCount !== 0" class="container">
+        <div class="data-overview">
+          <div class="label">数据概况</div>
+          <div class="row-list">
+            <div class="row-item">
+              <div class="title">投票类型</div>
+              <div class="text">{{ postType }}</div>
+            </div>
+            <div class="row-item">
+              <div class="title">投票人数</div>
+              <div class="text">{{ voteDetail.participantTotalCount }}</div>
+            </div>
+            <div class="row-item">
+              <div class="title">验证方式</div>
+              <div class="text">{{ checkType }}</div>
+            </div>
+          </div>
+          <div class="label">统计报表</div>
+          <div class="report-content">
+            <div class="question-content">
+              投票标题：{{ voteDetail.name }}
+              <el-dropdown @command="handleCommand" style="float: right">
+                <span class="el-dropdown-link">
+                  图表类型
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="pie" icon="el-icon-pie-chart">
+                      饼状图
+                    </el-dropdown-item>
+                    <el-dropdown-item command="bar" icon="el-icon-s-data">
+                      柱状图
+                    </el-dropdown-item>
+                    <el-dropdown-item command="line" icon="el-icon-share">
+                      折线图
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </div>
+            <div class="chart-wrapper">
+              <BarChart
+                v-if="showType === 'bar'"
+                :name="optionsData.name"
+                :data="optionsData.data"
+              />
+              <LineChart
+                v-if="showType === 'line'"
+                :name="optionsData.name"
+                :data="optionsData.data"
+              />
+              <PieChart
+                v-if="showType === 'pie'"
+                :name="optionsData.name"
+                :data="optionsData.data"
+              />
+            </div>
+            <div class="table-wrapper">
+              <el-table
+                border
+                :data="tableData"
+                show-summary
+                style="width: 100%"
+              >
+                <el-table-column prop="name" label="选项" />
+                <el-table-column prop="value" label="投票次数" />
+              </el-table>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
     </div>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup>

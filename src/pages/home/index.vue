@@ -145,7 +145,8 @@ export default defineComponent({
           'YYYY-MM-DDTHH:mm:ss.000+08:00'
         ),
         name: '投票标题',
-        description: '写下您的投票项目描述......',
+        description:
+          '感谢您能抽出几分钟时间来参加本次答题，现在我们就马上开始吧！',
         status: 0,
         optionList: [{ name: '选项1' }, { name: '选项2' }]
       }

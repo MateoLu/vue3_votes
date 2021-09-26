@@ -42,6 +42,7 @@
               class="input-dynamic input-description"
             />
           </div>
+          <div class="line"></div>
           <div class="question-choose">
             <DynamicOptionEdit
               v-for="item in optionsData"
@@ -134,8 +135,8 @@ watch(
       return
     }
     if (n.name === '') return
-    console.log(n.expirationDate)
     if (n.expirationDate == null) return
+
     const params = { ...n }
     if (
       new Date(
@@ -216,12 +217,18 @@ const handleSubmit = () => {
           message: '投票标题不能为空',
           type: 'warning'
         })
+      } else if (putValue.description === '') {
+        ElNotification({
+          title: '警告',
+          message: '请输入您的投票描述噢～',
+          type: 'warning'
+        })
       } else {
         await updateVote(voteId.value, {
           ...putValue,
           status: 1
         })
-        router.push(`/vote/publish/${voteId.value}`)
+        router.replace(`/vote/publish/${voteId.value}`)
       }
     })
     .catch(() => {
@@ -240,7 +247,7 @@ const handleSubmit = () => {
   width: 100%;
   height: calc(100% - 60px);
   .el-aside {
-    width: 400px;
+    width: 350px;
     height: calc(100vh - 60px);
     padding: 20px;
     background-color: #fff;
@@ -266,6 +273,11 @@ const handleSubmit = () => {
         flex: 2;
         display: flex;
         flex-direction: column;
+        .line {
+          height: 3px;
+          background-color: #69a2ed;
+          margin: 5px 0 15px;
+        }
         .question-choose {
           flex: auto;
         }
@@ -301,7 +313,6 @@ const handleSubmit = () => {
       text-align: center;
     }
     &.input-description {
-      font-size: 20px;
       height: 30px;
       color: #888;
     }

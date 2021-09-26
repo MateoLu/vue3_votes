@@ -2,9 +2,7 @@
   <div class="vote-container">
     <VoteHeader />
     <section class="main-wrapper">
-      <el-scrollbar>
-        <router-view />
-      </el-scrollbar>
+      <router-view />
     </section>
   </div>
 </template>

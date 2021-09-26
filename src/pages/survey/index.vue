@@ -21,6 +21,7 @@
           </el-icon>
           <span>投票成功</span>
         </div>
+        <div class="line"></div>
         <ProgressBar
           :count="detail.recordTotalCount"
           :list="detail.optionVOList"
@@ -327,6 +328,11 @@ const submitForm = () => {
       .res-title {
         text-align: center;
         color: #484848;
+      }
+      .line {
+        margin: 15px 0;
+        height: 3px;
+        background-color: #88b9f9;
       }
       .info {
         display: flex;
