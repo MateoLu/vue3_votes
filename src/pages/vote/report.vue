@@ -102,9 +102,9 @@ import PieChart from '@/components/PieChart.vue'
 import Footer from '@/components/Footer.vue'
 
 const isLoading = ref(true)
-
 const tableData = ref([])
-
+const route = useRoute()
+const voteDetail = ref({})
 onMounted(async () => {
   const elLoading = ElLoading.service({
     fullscreen: true,
@@ -131,9 +131,6 @@ onMounted(async () => {
     elLoading.close()
   }
 })
-
-const route = useRoute()
-const voteDetail = ref({})
 
 const postType = computed(() =>
   voteDetail.value.isMultiple === 0 ? '单选' : '多选'
