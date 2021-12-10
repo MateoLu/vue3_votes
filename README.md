@@ -1,5 +1,10 @@
 # zbc_votes
 
+## 启动项目
+
+npm install
+npm run dev
+
 ## 介绍
 
 投票系统

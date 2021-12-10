@@ -45,8 +45,7 @@ export default defineConfig({
     // 反向代理配置，注意rewrite写法，开始没看文档在这里踩了坑
     proxy: {
       '/api': {
-        // 代理接口 'http://47.106.210.214:8080'  '0.0.0.0'
-        target: 'http://47.106.210.214:8080',
+        target: 'xxxx',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
